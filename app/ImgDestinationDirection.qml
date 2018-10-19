@@ -6,6 +6,8 @@ Item {
 	width: childrenRect.width
 	height: childrenRect.height
 
+    visible: false
+
 	function settleState() {
 		if(img_destination_direction.state == "1"){
 			img_destination_direction.state = "2";
@@ -34,7 +36,7 @@ Item {
 		y: 0
 		width: 100
 		height: 100
-		source: "images/1_uturn.png"
+        source: "images/181px-u-turn.svg.png"
 
 		MouseArea {
 			anchors.fill: parent
@@ -45,39 +47,53 @@ Item {
 	states: [
 		State {
 			name: "1"
-			PropertyChanges { target: direction; source: "images/1_uturn.png" }
+            PropertyChanges { target: img_destination_direction; visible: true }
+            PropertyChanges { target: direction; source: "images/181px-u-turn.svg.png" }
 		},
 		State {
 			name: "2"
-			PropertyChanges { target: direction; source: "images/2_sharp_right.png" }
+            PropertyChanges { target: img_destination_direction; visible: true }
+            PropertyChanges { target: direction; source: "images/91px-MUTCD_M6-2aR.svg.png" }
 		},
 		State {
 			name: "3"
-			PropertyChanges { target: direction; source: "images/3_right.png" }
+            PropertyChanges { target: img_destination_direction; visible: true }
+            PropertyChanges { target: direction; source: "images/91px-MUTCD_M6-1R.svg.png" }
 		},
 		State {
 			name: "4"
-			PropertyChanges { target: direction; source: "images/4_slight_right.png" }
+            PropertyChanges { target: img_destination_direction; visible: true }
+            PropertyChanges { target: direction; source: "images/91px-MUTCD_M6-2R.svg.png" }
 		},
 		State {
 			name: "5"
-			PropertyChanges { target: direction; source: "images/5_straight.png" }
+            PropertyChanges { target: img_destination_direction; visible: true }
+            PropertyChanges { target: direction; source: "images/91px-MUTCD_M6-3.svg.png" }
 		},
 		State {
 			name: "6"
-			PropertyChanges { target: direction; source: "images/6_slight_left.png" }
+            PropertyChanges { target: img_destination_direction; visible: true }
+            PropertyChanges { target: direction; source: "images/91px-MUTCD_M6-2L.svg.png" }
 		},
 		State {
 			name: "7"
-			PropertyChanges { target: direction; source: "images/7_left.png" }
+            PropertyChanges { target: img_destination_direction; visible: true }
+            PropertyChanges { target: direction; source: "images/91px-MUTCD_M6-1L.svg.png" }
 		},
 		State {
 			name: "8"
-			PropertyChanges { target: direction; source: "images/8_sharp_left.png" }
+            PropertyChanges { target: img_destination_direction; visible: true }
+            PropertyChanges { target: direction; source: "images/91px-MUTCD_M6-2aL.svg.png" }
 		},
 		State {
 			name: "9"
-			PropertyChanges { target: direction; source: "images/Dest_Flag.jpg" }
-		}
+            PropertyChanges { target: img_destination_direction; visible: true }
+            PropertyChanges { target: direction; source: "images/240px-HEB_project_flow_icon_04_checkered_flag.svg.png" }
+        },
+        State {
+            name: "invisible"
+            PropertyChanges { target: img_destination_direction; visible: false }
+        }
+
 	]
 }

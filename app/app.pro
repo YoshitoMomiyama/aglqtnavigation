@@ -1,5 +1,6 @@
 TARGET = testqt
-QT = quick aglextras qml
+QT = quick qml
+#QT += aglextras
 CONFIG += c++11 link_pkgconfig
 #PKGCONFIG += 
 
@@ -12,3 +13,5 @@ RESOURCES += \
     images/images.qrc
 
 include(app.pri)
+
+HEADERS +=

@@ -1,3 +1,4 @@
 TEMPLATE = subdirs
-SUBDIRS = app package
+SUBDIRS = app
+#SUBDIRS += package
 package.depends += app

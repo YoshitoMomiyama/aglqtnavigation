@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
+#if defined(AGL)
 #include <QtAGLExtras/AGLApplication>
+#else
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#endif
 #include <QtCore/QDebug>
 #include <QtCore/QCommandLineParser>
 #include <QtCore/QUrlQuery>
@@ -24,14 +29,25 @@
 #include <QtQml/QQmlContext>
 #include <QtQuickControls2/QQuickStyle>
 #include <QQuickWindow>
+#include <QTimerEvent>
 
 int main(int argc, char *argv[])
 {
-	AGLApplication app(argc, argv);
-	app.setApplicationName("testqt");
-	app.setupApplicationRole("testqt");
+#if defined(AGL)
+    AGLApplication app(argc, argv);
+    app.setApplicationName("testqt");
+    app.setupApplicationRole("testqt");
 
-	app.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
-	return app.exec();
+    app.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
+    return app.exec();
+#else
+    QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
+
+    app.setApplicationName("testqt");
+
+    engine.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
+    return app.exec();
+#endif
 }
 

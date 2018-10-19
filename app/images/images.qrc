@@ -1,23 +1,21 @@
 <RCC>
     <qresource prefix="/images">
-        <file>SW_Patern_1.bmp</file>
-        <file>SW_Patern_2.bmp</file>
-        <file>SW_Patern_3.bmp</file>
-        <file>Enlarge_button.bmp</file>
-        <file>Direction_Hup.jpeg</file>
-        <file>Direction_Nup.jpeg</file>
-        <file>thum500_t002_0_ip_0175.jpg</file>
-        <file>Shrink_button.bmp</file>
-        <file>1_uturn.png</file>
-        <file>2_sharp_right.png</file>
-        <file>3_right.png</file>
-        <file>4_slight_right.png</file>
-        <file>5_straight.png</file>
-        <file>6_slight_left.png</file>
-        <file>7_left.png</file>
-        <file>8_sharp_left.png</file>
-        <file>Dest_Flag.jpg</file>
-        <file>car_icon.svg</file>
-        <file>nmea.txt</file>
+        <file>91px-MUTCD_M6-1L.svg.png</file>
+        <file>91px-MUTCD_M6-1R.svg.png</file>
+        <file>91px-MUTCD_M6-2aL.svg.png</file>
+        <file>91px-MUTCD_M6-2aR.svg.png</file>
+        <file>91px-MUTCD_M6-2L.svg.png</file>
+        <file>91px-MUTCD_M6-2R.svg.png</file>
+        <file>91px-MUTCD_M6-3.svg.png</file>
+        <file>124px-Pictograms-nps-land-driving_tour-2.svg.png</file>
+        <file>200px-Black_close_x.svg.png</file>
+        <file>202px-Compass-icon_bb_N.svg.png</file>
+        <file>240px-Antu_file-zoom-out.svg.png</file>
+        <file>240px-Antu_kdenlive-zoom-large.svg.png</file>
+        <file>240px-Compass_icon_NE.svg.png</file>
+        <file>240px-Red_Arrow_Up.svg.png</file>
+        <file>240px-HEB_project_flow_icon_04_checkered_flag.svg.png</file>
+        <file>207px-Car_icon_top.svg.png</file>
+        <file>181px-u-turn.svg.png</file>
     </qresource>
 </RCC>

@@ -7,13 +7,19 @@ Item {
 		width: 100
 		height: 100
 
+//        property bool heading_up: false
+
 		function settleState() {
-			if(btn_map_direction.state == "HeadingUp"){
-				btn_map_direction.state = "NorthUp";
+            if(root.st_heading_up){
+                btn_map_direction.state = "NorthUp"
+                car_position_mapitem.state = "NorthUp"
+                root.st_heading_up = false
 			} else {
-				btn_map_direction.state = "HeadingUp";
+                btn_map_direction.state = "HeadingUp"
+                car_position_mapitem.state = "HeadingUp"
+                root.st_heading_up = true
 			}
-		}
+        }
 
 		onClicked: { settleState() }
 
@@ -23,18 +29,24 @@ Item {
 			height: 92
 			anchors.verticalCenter: parent.verticalCenter
 			anchors.horizontalCenter: parent.horizontalCenter
-			source: "images/Direction_Hup.jpeg"
+            source: "images/202px-Compass-icon_bb_N.svg.png"
 		}
 
 		states: [
 			State {
 				name: "HeadingUp"
-				PropertyChanges { target: image; source: "images/Direction_Hup.jpeg" }
+                PropertyChanges { target: image; source: "images/240px-Compass_icon_NE.svg.png" }
+                PropertyChanges { target: map; bearing: 360 - car_direction }
 			},
 			State {
 				name: "NorthUp"
-				PropertyChanges { target: image; source: "images/Direction_Nup.jpeg" }
+                PropertyChanges { target: image; source: "images/202px-Compass-icon_bb_N.svg.png" }
+                PropertyChanges { target: map; bearing: 0 }
 			}
 		]
+
+        transitions: Transition {
+            NumberAnimation { properties: "bearing"; easing.type: Easing.InOutQuad }
+        }
 	}
 }
