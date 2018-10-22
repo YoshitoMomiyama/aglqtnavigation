@@ -34,6 +34,7 @@ ApplicationWindow {
     property bool st_heading_up: false
     property real default_zoom_level : 18
 
+
 	Map{
 		id: map
         property int pathcounter : 0
@@ -238,6 +239,18 @@ ApplicationWindow {
 			}
 			routeModel.update();
 		}
+
+        function calculateNextCoordinate(currentCoordinate,degree,distance)
+        {
+            console.log("calculateDemoRouteCoordinate")
+
+            var radian = degree * Math.PI / 180;
+            var toSN = Math.sin(radian) * distance
+            var toEW = Math.cos(radian) * distance
+            var lat
+            var lon
+        }
+
 		MouseArea {
 			id: mouseArea
 			property variant lastCoordinate
