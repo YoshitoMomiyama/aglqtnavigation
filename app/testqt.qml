@@ -135,6 +135,16 @@ ApplicationWindow {
             }
         }
 
+        MapQuickItem {
+            id: icon_destination
+            sourceItem: Image {
+                id: icon_destination_image
+                width: 16
+                height: 16
+                source: "images/240px-Red_Arrow_Up.svg.png"
+            }
+        }
+
 		RouteModel {
 			id: routeModel
 			plugin : map.plugin
@@ -196,6 +206,7 @@ ApplicationWindow {
                 btn_guidance.state = "Routing"
 
                 routeModel.update()
+                icon_destination.coordinate = coord
             }
         }
 
