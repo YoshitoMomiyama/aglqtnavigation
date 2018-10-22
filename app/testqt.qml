@@ -44,17 +44,19 @@ ApplicationWindow {
 		property int pressX : -1
 		property int pressY : -1
 		property int jitterThreshold : 30
-		width: 1080
+        property variant currentpostion : QtPositioning.coordinate(car_position_lat, car_position_lon)	// Toyota Motor North America
+        property variant demoguidance_position : currentpostion
+
+        width: 1080
 		height: 1488
 		plugin: Plugin {
 			name: "mapbox"
 			PluginParameter { name: "mapbox.access_token";
 			value: "pk.eyJ1IjoiYWlzaW53ZWkiLCJhIjoiY2pqNWg2cG81MGJoazNxcWhldGZzaDEwYyJ9.imkG45PQUKpgJdhO2OeADQ" }
 		}
-        center: QtPositioning.coordinate(car_position_lat, car_position_lon)	// Toyota Motor North America
+        center: currentpostion	// Toyota Motor North America
         zoomLevel: default_zoom_level
         bearing: 0  //north up
-        property variant currentpostion : QtPositioning.coordinate(car_position_lat, car_position_lon)	// Toyota Motor North America
 
 		GeocodeModel {
 			id: geocodeModel
@@ -114,7 +116,7 @@ ApplicationWindow {
                 }
             }
             anchorPoint: Qt.point(car_position_mapitem_image.width/2, car_position_mapitem_image.height/2)
-            coordinate: QtPositioning.coordinate(root.car_position_lat, root.car_position_lon)
+            coordinate: map.demoguidance_position
 
 
             states: [
@@ -197,11 +199,10 @@ ApplicationWindow {
         }
 
         function initDestination(){
-//            var startCoordinate = QtPositioning.coordinate(car_position_lat, car_position_lon)
             routeModel.reset();
             console.log("initWaypoint")
             routeQuery.clearWaypoints();
-            routeQuery.addWaypoint(map.currentpostion)
+            routeQuery.addWaypoint(currentpostion)
             routeQuery.travelModes = RouteQuery.CarTravel
             routeQuery.routeOptimizations = RouteQuery.FastestRoute
             for (var i=0; i<9; i++) {
@@ -211,6 +212,15 @@ ApplicationWindow {
             pathcounter = 0
             segmentcounter = 0
             routeModel.update();
+
+            // update car_position_mapitem
+            car_position_mapitem.coordinate = currentpostion
+
+            // TODO:update car_position_mapitem angle
+
+
+            // update map.center
+            map.center = currentpostion
         }
 
 		function calculateMarkerRoute()
@@ -262,8 +272,8 @@ ApplicationWindow {
 			console.log("updatePositon")
             if(pathcounter < routeModel.get(0).path.length){
                 console.log("path: ", pathcounter, "/", routeModel.get(0).path.length, "", routeModel.get(0).path[pathcounter])
-                map.currentpostion = routeModel.get(0).path[pathcounter]
-                car_position_mapitem.coordinate = map.currentpostion
+                map.demoguidance_position = routeModel.get(0).path[pathcounter]
+
                 // report a new instruction if current position matches with the head position of the segment
                 if(segmentcounter < routeModel.get(0).segments.length){
                     if(routeModel.get(0).path[pathcounter] === routeModel.get(0).segments[segmentcounter].path[0]){
@@ -272,16 +282,24 @@ ApplicationWindow {
                         segmentcounter++
                     }
                 }
-                pathcounter++
-            }else{
-                pathcounter = 0
-                segmentcounter = 0
-                car_position_mapitem.coordinate = map.currentpostion
-            }
-            if(btn_guidance.state === "onGuide"){
-                map.center = map.currentpostion
-            }
 
+                // update car_position_mapitem
+                car_position_mapitem.coordinate = map.demoguidance_position
+
+                // TODO:update car_position_mapitem angle
+
+                // update progress_next_cross
+                progress_next_cross.setProgress(Math.random() * 150)
+
+                // update map.center
+                map.center = map.demoguidance_position
+
+                pathcounter++
+            }
+            else
+            {
+                btn_guidance.sts_guide = 0
+            }
 		}
 	}
 		
@@ -297,7 +315,7 @@ ApplicationWindow {
 			height: 100
 			
 			function present_position_clicked() {
-				map.center = map.currentpostion
+                map.center = currentpostion
                 map.zoomLevel = default_zoom_level
             }
 			onClicked: { present_position_clicked() }
@@ -350,17 +368,4 @@ ApplicationWindow {
 		x: 225
 		y: 20
 	}
-
-    function tmr_func(){
-        progress_next_cross.setProgress(Math.random() * 150)
-    }
-
-    Item {
-        Timer {
-            interval: 500
-            running: true
-            repeat: true
-            onTriggered: tmr_func()
-        }
-    }
 }

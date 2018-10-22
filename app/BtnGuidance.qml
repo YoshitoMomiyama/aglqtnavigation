@@ -11,15 +11,28 @@ Item {
     // 2: on guide
     property int sts_guide: 0
 
+    onSts_guideChanged: {
+        console.log("onSts_guideChanged")
+        switch(btn_guidance.sts_guide){
+        case 0:
+            positionTimer.stop();
+            break
+        case 1:
+            break
+        case 2:
+            positionTimer.start();
+            break
+        default:
+            break
+        }
+    }
 
     function startGuidance() {
-        positionTimer.start();
         btn_guidance.sts_guide = 2
         btn_guidance.state = "onGuide"
     }
 
     function discardWaypoints() {
-        positionTimer.stop();
         map.initDestination()
 
         btn_guidance.sts_guide = 0
