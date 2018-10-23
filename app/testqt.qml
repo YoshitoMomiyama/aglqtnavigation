@@ -136,12 +136,22 @@ ApplicationWindow {
         }
 
         MapQuickItem {
-            id: icon_destination
+            id: icon_start_point
             sourceItem: Image {
-                id: icon_destination_image
-                width: 16
-                height: 16
-                source: "images/240px-Red_Arrow_Up.svg.png"
+                id: icon_start_point_image
+                width: 32
+                height: 32
+                source: "images/240px-HEB_project_flow_icon_04_checkered_flag.svg.png"
+            }
+        }
+
+        MapQuickItem {
+            id: icon_end_point
+            sourceItem: Image {
+                id: icon_end_point_image
+                width: 32
+                height: 32
+                source: "images/240px-HEB_project_flow_icon_04_checkered_flag.svg.png"
             }
         }
 
@@ -198,6 +208,12 @@ ApplicationWindow {
                 initDestination()
             }
 
+            if(waypoint_count == 0)  {
+                // set icon_start_point
+                icon_start_point.coordinate = currentpostion
+                map.addMapItem(icon_start_point)
+            }
+
             if(waypoint_count < 9){
                 routeQuery.addWaypoint(coord)
                 waypoint_count += 1
@@ -206,7 +222,10 @@ ApplicationWindow {
                 btn_guidance.state = "Routing"
 
                 routeModel.update()
-                icon_destination.coordinate = coord
+
+                // update icon_end_point
+                icon_end_point.coordinate = coord
+                map.addMapItem(icon_end_point)
             }
         }
 
@@ -224,6 +243,10 @@ ApplicationWindow {
             pathcounter = 0
             segmentcounter = 0
             routeModel.update();
+
+            // remove MapItem
+            map.removeMapItem(icon_start_point)
+            map.removeMapItem(icon_end_point)
 
             // update car_position_mapitem
             car_position_mapitem.coordinate = currentpostion
