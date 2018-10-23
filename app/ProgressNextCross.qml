@@ -9,12 +9,12 @@ Item {
 
     // val [Input]
     //   distance to next cross. (unit = meter)
-    //   when over the 100m, progress bar indicates max (same as 100m)
+    //   when over the ProgressBar.maximumValue/m, progress bar indicates max (same as ProgressBar.maximumValue/m)
     function setProgress(val) {
-        if ( (0 < val) && (val < 100 ) ) {
+        if ( (0 < val) && (val < ProgressBar.maximumValue ) ) {
             bar.value = val
-        }else if ( 100 < val ){
-            bar.value = 100
+        }else if ( ProgressBar.maximumValue < val ){
+            bar.value = ProgressBar.maximumValue
         }else{
             bar.value = 0
         }
@@ -27,7 +27,7 @@ Item {
         orientation: Qt.Vertical
         value: 0
         minimumValue: 0
-        maximumValue: 100
+        maximumValue: 300
 
         style: ProgressBarStyle {
             progress: Rectangle {
