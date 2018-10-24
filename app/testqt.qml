@@ -32,7 +32,7 @@ ApplicationWindow {
     property real car_direction: 135    //SouthEast
     property bool st_heading_up: false
     property real default_zoom_level : 18
-
+    property real default_car_direction : 0
 
 	Map{
 		id: map
@@ -198,7 +198,10 @@ ApplicationWindow {
 							console.log("", get(0).path[i])
 						}
 						console.log("1st instruction: ", get(0).segments[map.segmentcounter].maneuver.instructionText)
-						break
+                        for( i = 0; i < routeModel.get(0).segments.length; i++){
+                            console.log("direction:", routeModel.get(0).segments[i].direction)
+                        }
+                        break
 					}
 				} else if (status == RouteModel.Error) {
 				//	map.routeError()
@@ -272,11 +275,14 @@ ApplicationWindow {
             // update car_position_mapitem
             car_position_mapitem.coordinate = currentpostion
 
-            // TODO:update car_position_mapitem angle
-
+            // update car_position_mapitem angle
+            root.car_direction = root.default_car_direction
 
             // update map.center
             map.center = currentpostion
+
+            // reset demoguidance_position
+            map.demoguidance_position = currentpostion
         }
 
 		function calculateMarkerRoute()
@@ -314,32 +320,29 @@ ApplicationWindow {
         // Calculate distance from latitude and longitude between two points
         function calculateDistance(lat1, lon1, lat2, lon2)
         {
-            var y1 = lat1 * Math.PI / 180;
-            var y2 = lat2 * Math.PI / 180;
-            var x1 = lon1 * Math.PI / 180;
-            var x2 = lon2 * Math.PI / 180;
-            var A = 6378140;
-            var B = 6356755;
-            var F = (A - B) / A;
+            var radLat1 = lat1 * Math.PI / 180;
+            var radLon1 = lon1 * Math.PI / 180;
+            var radLat2 = lat2 * Math.PI / 180;
+            var radLon2 = lon2 * Math.PI / 180;
 
-            var P1 = Math.atan((B / A) * Math.tan(lat1));
-            var P2 = Math.atan((B / A) * Math.tan(lat2));
-            var X = Math.acos(Math.sin(P1) * Math.sin(P2) + Math.cos(P1) * Math.cos(P2) * Math.cos(lon1 - lon2));
-            var L = (F / 8) * ((Math.sin(X) - X) * Math.pow((Math.sin(P1) + Math.sin(P2)), 2) / Math.pow(Math.cos(X / 2), 2) - (Math.sin(X) - X) * Math.pow(Math.sin(P1) - Math.sin(P2), 2) / Math.pow(Math.sin(X), 2));
+            var r = 6378137.0;
 
-            var distance = A * (X + L);
-            return Math.round(distance);
+            var averageLat = (radLat1 - radLat2) / 2;
+            var averageLon = (radLon1 - radLon2) / 2;
+            var result = r * 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(averageLat), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(averageLon), 2)));
+            return Math.round(result);
         }
 
         // Setting the next car position from the direction and demonstration mileage
         function setNextCoordinate(curlat,curlon,direction,distance)
         {
-            var lat_distance = distance * Math.cos(direction * Math.PI / 180)
-            var lat_per_meter = 360 / (2 * Math.PI * 6378140)
-            var addlat = lat_distance * lat_per_meter
-            var lon_distance = distance * Math.sin(direction * Math.PI / 180)
-            var lon_per_meter = 360 / (2 * Math.PI * (6378140 * Math.cos(addlat * Math.PI / 180)))
-            var addlon = lon_distance * lon_per_meter
+            var radian = direction * Math.PI / 180
+            var lat_per_meter = 111319.49079327358;
+            var lat_distance = distance * Math.cos(radian);
+            var addlat = lat_distance / lat_per_meter
+            var lon_distance = distance * Math.sin(radian)
+            var lon_per_meter = (Math.cos( (curlat+addlat) / 180 * Math.PI) * 2 * Math.PI * 6378137) / 360;
+            var addlon = lon_distance / lon_per_meter
             map.demoguidance_position = QtPositioning.coordinate(curlat+addlat, curlon+addlon);
         }
 
@@ -377,7 +380,7 @@ ApplicationWindow {
 			console.log("updatePositon")
             if(pathcounter <= routeModel.get(0).path.length - 1){
                 console.log("path: ", pathcounter, "/", routeModel.get(0).path.length - 1, "", routeModel.get(0).path[pathcounter])
-
+                //console.log("from:",map.demoguidance_position.latitude,",",map.demoguidance_position.longitude," To:",routeModel.get(0).path[pathcounter].latitude,",",routeModel.get(0).path[pathcounter].longitude)
                 // calculate distance
                 var next_distance = calculateDistance(map.demoguidance_position.latitude,
                                                       map.demoguidance_position.longitude,
@@ -393,15 +396,20 @@ ApplicationWindow {
                 console.log("next_direction:",next_direction);
 
                 // set next coordidnate
-                if(next_distance < 20)
+                if(next_distance < 25)
                 {
                     map.demoguidance_position = routeModel.get(0).path[pathcounter]
                     if(pathcounter < routeModel.get(0).path.length - 1){
                         pathcounter++
                     }
+                    else
+                    {
+                        btn_guidance.sts_guide = 0
+                    }
                 }else{
                     setNextCoordinate(map.demoguidance_position.latitude, map.demoguidance_position.longitude,next_direction,20)
                 }
+                console.log("NextCoordinate:",map.demoguidance_position.latitude,",",map.demoguidance_position.longitude)
 
                 // update car_position_mapitem
                 car_position_mapitem.coordinate = map.demoguidance_position
@@ -417,7 +425,9 @@ ApplicationWindow {
                     if(map.demoguidance_position === routeModel.get(0).segments[segmentcounter].path[0]){
                         console.log("new segment: ", segmentcounter, "/", routeModel.get(0).segments.length - 1)
                         console.log("instruction: ", routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
-                        segmentcounter++
+                        if(segmentcounter < routeModel.get(0).segments.length - 1){
+                            segmentcounter++
+                        }
                     }
                     // calculate next cross distance
                     var next_cross_distance = calculateDistance(map.demoguidance_position.latitude,
@@ -427,14 +437,10 @@ ApplicationWindow {
                     console.log("next_cross_distance:",next_cross_distance);
 
                     // update progress_next_cross
-                    progress_next_cross.setProgress(Math.round((next_cross_distance%300)/300*100))
+                    progress_next_cross.setProgress(next_cross_distance)
 
                 }
 
-            }
-            else
-            {
-                btn_guidance.sts_guide = 0
             }
 		}
 	}

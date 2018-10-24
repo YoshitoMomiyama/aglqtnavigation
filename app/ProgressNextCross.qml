@@ -11,10 +11,10 @@ Item {
     //   distance to next cross. (unit = meter)
     //   when over the ProgressBar.maximumValue/m, progress bar indicates max (same as ProgressBar.maximumValue/m)
     function setProgress(val) {
-        if ( (0 < val) && (val < ProgressBar.maximumValue ) ) {
+        if ( (0 < val) && (val < bar.maximumValue ) ) {
             bar.value = val
-        }else if ( ProgressBar.maximumValue < val ){
-            bar.value = ProgressBar.maximumValue
+        }else if ( bar.maximumValue < val ){
+            bar.value = bar.maximumValue
         }else{
             bar.value = 0
         }
