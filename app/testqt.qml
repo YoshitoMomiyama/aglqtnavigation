@@ -298,18 +298,18 @@ ApplicationWindow {
 
         // Calculate direction from latitude and longitude between two points
         function calculateDirection(lat1, lon1, lat2, lon2) {
-            var y1 = lat1 * Math.PI / 180;
-            var y2 = lat2 * Math.PI / 180;
-            var x1 = lon1 * Math.PI / 180;
-            var x2 = lon2 * Math.PI / 180;
-            var Y  = Math.cos(x2) * Math.sin(y2 - y1);
-            var X  = Math.cos(x1) * Math.sin(x2) - Math.sin(x1) * Math.cos(x2) * Math.cos(y2 - y1);
-            var directionEast = 180 * Math.atan2(Y,X) / Math.PI;
-            if (directionEast < 0) {
-              directionEast = directionEast + 360;
+            var curlat = lat1 * Math.PI / 180;
+            var curlon = lon1 * Math.PI / 180;
+            var taglat = lat2 * Math.PI / 180;
+            var taglon = lon2 * Math.PI / 180;
+
+            var Y  = Math.sin(taglon - curlon);
+            var X  = Math.cos(curlat) * Math.tan(taglat) - Math.sin(curlat) * Math.cos(Y);
+            var direction = 180 * Math.atan2(Y,X) / Math.PI;
+            if (direction < 0) {
+              direction = direction + 360;
             }
-            var directionNorth = (directionEast + 90) % 360;
-            return directionNorth;
+            return direction;
         }
 
         // Calculate distance from latitude and longitude between two points
@@ -384,6 +384,7 @@ ApplicationWindow {
 			console.log("updatePositon")
             if(pathcounter <= routeModel.get(0).path.length - 1){
                 console.log("path: ", pathcounter, "/", routeModel.get(0).path.length - 1, "", routeModel.get(0).path[pathcounter])
+//                console.log("from_to:",map.currentpostion.latitude,",",map.currentpostion.longitude,",",routeModel.get(0).path[pathcounter].latitude,",",routeModel.get(0).path[pathcounter].longitude)
                 // calculate distance
                 var next_distance = calculateDistance(map.currentpostion.latitude,
                                                       map.currentpostion.longitude,
