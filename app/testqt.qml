@@ -29,7 +29,7 @@ ApplicationWindow {
 
     property real car_position_lat: 36.131516     // Las Vegas Convention Center
     property real car_position_lon: -115.151507
-    property real car_direction: 135    //SouthEast
+    property real car_direction: 0  //Noth
     property bool st_heading_up: false
     property real default_zoom_level : 18
     property real default_car_direction : 0
@@ -45,7 +45,6 @@ ApplicationWindow {
 		property int pressY : -1
 		property int jitterThreshold : 30
         property variant currentpostion : QtPositioning.coordinate(car_position_lat, car_position_lon)
-        property variant demoguidance_position : currentpostion
 
         width: 1080
 		height: 1488
@@ -54,9 +53,9 @@ ApplicationWindow {
 			PluginParameter { name: "mapbox.access_token";
 			value: "pk.eyJ1IjoiYWlzaW53ZWkiLCJhIjoiY2pqNWg2cG81MGJoazNxcWhldGZzaDEwYyJ9.imkG45PQUKpgJdhO2OeADQ" }
 		}
-        center: currentpostion
+        center: QtPositioning.coordinate(car_position_lat, car_position_lon)
         zoomLevel: default_zoom_level
-        bearing: 0  //north up
+        bearing: 0
 
 		GeocodeModel {
 			id: geocodeModel
@@ -74,7 +73,7 @@ ApplicationWindow {
 			}
             //coordinate: poiTheQtComapny.coordinate
             //anchorPoint: Qt.point(-poiTheQtComapny.sourceItem.width * 0.5,poiTheQtComapny.sourceItem.height * 1.5)
-		}
+        }
 		MapItemView {
 			model: geocodeModel
 			delegate: pointDelegate
@@ -138,7 +137,7 @@ ApplicationWindow {
                 }
             }
             anchorPoint: Qt.point(car_position_mapitem_image.width/2, car_position_mapitem_image.height/2)
-            coordinate: map.demoguidance_position
+            coordinate: map.currentpostion
 
 
             states: [
@@ -192,15 +191,15 @@ ApplicationWindow {
 					case 1:
 						map.pathcounter = 0
 						map.segmentcounter = 0
-						console.log("1 route found")
-						console.log("path: ", get(0).path.length, "segment: ", get(0).segments.length)
-						for(var i = 0; i < get(0).path.length; i++){
-							console.log("", get(0).path[i])
-						}
-						console.log("1st instruction: ", get(0).segments[map.segmentcounter].maneuver.instructionText)
-                        for( i = 0; i < routeModel.get(0).segments.length; i++){
-                            console.log("direction:", routeModel.get(0).segments[i].direction)
-                        }
+//						console.log("1 route found")
+//						console.log("path: ", get(0).path.length, "segment: ", get(0).segments.length)
+//						for(var i = 0; i < get(0).path.length; i++){
+//							console.log("", get(0).path[i])
+//						}
+//						console.log("1st instruction: ", get(0).segments[map.segmentcounter].maneuver.instructionText)
+//                        for( i = 0; i < routeModel.get(0).segments.length; i++){
+//                            console.log("direction:", routeModel.get(0).segments[i].direction)
+//                        }
                         break
 					}
 				} else if (status == RouteModel.Error) {
@@ -256,8 +255,12 @@ ApplicationWindow {
         function initDestination(){
             routeModel.reset();
             console.log("initWaypoint")
+
+            // reset currentpostion
+            map.currentpostion = QtPositioning.coordinate(car_position_lat, car_position_lon)
+
             routeQuery.clearWaypoints();
-            routeQuery.addWaypoint(currentpostion)
+            routeQuery.addWaypoint(map.currentpostion)
             routeQuery.travelModes = RouteQuery.CarTravel
             routeQuery.routeOptimizations = RouteQuery.FastestRoute
             for (var i=0; i<9; i++) {
@@ -272,17 +275,9 @@ ApplicationWindow {
             map.removeMapItem(icon_start_point)
             map.removeMapItem(icon_end_point)
 
-            // update car_position_mapitem
-            car_position_mapitem.coordinate = currentpostion
-
             // update car_position_mapitem angle
             root.car_direction = root.default_car_direction
 
-            // update map.center
-            map.center = currentpostion
-
-            // reset demoguidance_position
-            map.demoguidance_position = currentpostion
         }
 
 		function calculateMarkerRoute()
@@ -343,7 +338,7 @@ ApplicationWindow {
             var lon_distance = distance * Math.sin(radian)
             var lon_per_meter = (Math.cos( (curlat+addlat) / 180 * Math.PI) * 2 * Math.PI * 6378137) / 360;
             var addlon = lon_distance / lon_per_meter
-            map.demoguidance_position = QtPositioning.coordinate(curlat+addlat, curlon+addlon);
+            map.currentpostion = QtPositioning.coordinate(curlat+addlat, curlon+addlon);
         }
 
 		MouseArea {
@@ -368,29 +363,37 @@ ApplicationWindow {
 			}
 			
 			onPressAndHold:{
-				if (Math.abs(map.pressX - mouse.x ) < map.jitterThreshold
-						&& Math.abs(map.pressY - mouse.y ) < map.jitterThreshold) {
-                    map.addDestination(lastCoordinate)
-				}
+                if(btn_guidance.state !== "onGuide")
+                {
+                    if (Math.abs(map.pressX - mouse.x ) < map.jitterThreshold
+                            && Math.abs(map.pressY - mouse.y ) < map.jitterThreshold) {
+                        map.addDestination(lastCoordinate)
+                    }
+                }
+
 			}
 		}
-		
+        gesture.onFlickStarted: {
+            btn_present_position.state = "Optional"
+        }
+        gesture.onPanStarted: {
+            btn_present_position.state = "Optional"
+        }
 		function updatePositon()
 		{
 			console.log("updatePositon")
             if(pathcounter <= routeModel.get(0).path.length - 1){
                 console.log("path: ", pathcounter, "/", routeModel.get(0).path.length - 1, "", routeModel.get(0).path[pathcounter])
-                //console.log("from:",map.demoguidance_position.latitude,",",map.demoguidance_position.longitude," To:",routeModel.get(0).path[pathcounter].latitude,",",routeModel.get(0).path[pathcounter].longitude)
                 // calculate distance
-                var next_distance = calculateDistance(map.demoguidance_position.latitude,
-                                                      map.demoguidance_position.longitude,
+                var next_distance = calculateDistance(map.currentpostion.latitude,
+                                                      map.currentpostion.longitude,
                                                       routeModel.get(0).path[pathcounter].latitude,
                                                       routeModel.get(0).path[pathcounter].longitude);
                 console.log("next_distance:",next_distance);
 
                 // calculate direction
-                var next_direction = calculateDirection(map.demoguidance_position.latitude,
-                                                        map.demoguidance_position.longitude,
+                var next_direction = calculateDirection(map.currentpostion.latitude,
+                                                        map.currentpostion.longitude,
                                                         routeModel.get(0).path[pathcounter].latitude,
                                                         routeModel.get(0).path[pathcounter].longitude);
                 console.log("next_direction:",next_direction);
@@ -398,7 +401,7 @@ ApplicationWindow {
                 // set next coordidnate
                 if(next_distance < 25)
                 {
-                    map.demoguidance_position = routeModel.get(0).path[pathcounter]
+                    map.currentpostion = routeModel.get(0).path[pathcounter]
                     if(pathcounter < routeModel.get(0).path.length - 1){
                         pathcounter++
                     }
@@ -407,22 +410,23 @@ ApplicationWindow {
                         btn_guidance.sts_guide = 0
                     }
                 }else{
-                    setNextCoordinate(map.demoguidance_position.latitude, map.demoguidance_position.longitude,next_direction,20)
+                    setNextCoordinate(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,20)
                 }
-                console.log("NextCoordinate:",map.demoguidance_position.latitude,",",map.demoguidance_position.longitude)
-
-                // update car_position_mapitem
-                car_position_mapitem.coordinate = map.demoguidance_position
+                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
 
                 // car_position_mapitem angle
                 root.car_direction = next_direction
 
-                // update map.center
-                //map.center = map.demoguidance_position
+                if(btn_present_position.state === "Flowing")
+                {
+                    // update map.center
+                    map.center = map.currentpostion
+                }
+
 
                 // report a new instruction if current position matches with the head position of the segment
                 if(segmentcounter <= routeModel.get(0).segments.length - 1){
-                    if(map.demoguidance_position === routeModel.get(0).segments[segmentcounter].path[0]){
+                    if(map.currentpostion === routeModel.get(0).segments[segmentcounter].path[0]){
                         console.log("new segment: ", segmentcounter, "/", routeModel.get(0).segments.length - 1)
                         console.log("instruction: ", routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
                         if(segmentcounter < routeModel.get(0).segments.length - 1){
@@ -430,8 +434,8 @@ ApplicationWindow {
                         }
                     }
                     // calculate next cross distance
-                    var next_cross_distance = calculateDistance(map.demoguidance_position.latitude,
-                                                                map.demoguidance_position.longitude,
+                    var next_cross_distance = calculateDistance(map.currentpostion.latitude,
+                                                                map.currentpostion.longitude,
                                                                 routeModel.get(0).segments[segmentcounter].path[0].latitude,
                                                                 routeModel.get(0).segments[segmentcounter].path[0].longitude);
                     console.log("next_cross_distance:",next_cross_distance);
@@ -445,34 +449,13 @@ ApplicationWindow {
 		}
 	}
 		
-	Item {
-		id: btn_present_position
-		x: 942
-//		y: 1328
+    BtnPresentPosition {
+        id: btn_present_position
+        x: 942
+    //		y: 1328
         y: 530      // for debug
-		
-		Button {
-            id: btn_present_position_
-			width: 100
-			height: 100
-			
-			function present_position_clicked() {
-                map.center = map.currentpostion
-                map.zoomLevel = root.default_zoom_level
-            }
-			onClicked: { present_position_clicked() }
-			
-			Image {
-				id: image_present_position
-                width: 48
-				height: 92
-				anchors.verticalCenter: parent.verticalCenter
-				anchors.horizontalCenter: parent.horizontalCenter
-                source: "images/207px-Car_icon_top.svg.png"
-			}
-		}
-	}
-	
+    }
+
 	BtnMapDirection {
         id: btn_map_direction
 		x: 15

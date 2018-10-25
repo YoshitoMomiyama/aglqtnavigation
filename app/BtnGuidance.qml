@@ -28,6 +28,7 @@ Item {
     }
 
     function startGuidance() {
+        btn_present_position.state = "Flowing"
         btn_guidance.sts_guide = 2
         btn_guidance.state = "onGuide"
     }

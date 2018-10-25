@@ -6,7 +6,6 @@ Item {
 		id: btn_map_direction
 		width: 100
 		height: 100
-
 //        property bool heading_up: false
 
 		function settleState() {
@@ -36,7 +35,7 @@ Item {
 			State {
 				name: "HeadingUp"
                 PropertyChanges { target: image; source: "images/240px-Compass_icon_NE.svg.png" }
-                PropertyChanges { target: map; bearing: 360 - car_direction }
+                PropertyChanges { target: map; bearing: root.car_direction }
 			},
 			State {
 				name: "NorthUp"
