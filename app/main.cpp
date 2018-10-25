@@ -31,6 +31,8 @@
 #include <QQuickWindow>
 #include <QTimerEvent>
 
+#include "markermodel.h"
+
 int main(int argc, char *argv[])
 {
 #if defined(AGL)
@@ -45,6 +47,9 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     app.setApplicationName("testqt");
+
+    MarkerModel model;
+    engine.rootContext()->setContextProperty("markerModel", &model);
 
     engine.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
     return app.exec();
