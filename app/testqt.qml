@@ -175,6 +175,16 @@ ApplicationWindow {
             }
         }
 
+        //MapQuickItem {
+        //    id: icon_destination_point
+        //    sourceItem: Image {
+        //        id: icon_destination_point_image
+        //        width: 32
+        //        height: 32
+        //        source: "images/240px-HEB_project_flow_icon_04_checkered_flag.svg.png"
+        //    }
+        //}
+
 		RouteModel {
 			id: routeModel
 			plugin : map.plugin
@@ -226,6 +236,28 @@ ApplicationWindow {
 			delegate: routeDelegate
 		}
 
+        MapItemView{
+            model: markerModel
+            delegate: mapcomponent
+        }
+
+        Component {
+            id: mapcomponent
+            MapQuickItem {
+                id: icon_destination_point
+                anchorPoint.x: icon_destination_point_image.width/4
+                anchorPoint.y: icon_destination_point_image.height
+                coordinate: position
+
+                sourceItem: Image {
+                    id: icon_destination_point_image
+                    width: 32
+                    height: 32
+                    source: "images/200px-Black_close_x.svg.png"
+                }
+            }
+        }
+
         function addDestination(coord){
             if( waypoint_count < 0 ){
                 initDestination()
@@ -243,6 +275,11 @@ ApplicationWindow {
 
                 btn_guidance.sts_guide = 1
                 btn_guidance.state = "Routing"
+
+                for(var i=1; i<waypoint_count; i++) {
+                    var waypointlist = routeQuery.waypoints
+                    markerModel.addMarker(waypointlist[i])
+                }
 
                 routeModel.update()
 
@@ -270,6 +307,8 @@ ApplicationWindow {
             pathcounter = 0
             segmentcounter = 0
             routeModel.update();
+markerModel.removeMarker();
+       //     map.removeMapItem(markerModel);
 
             // remove MapItem
             map.removeMapItem(icon_start_point)
