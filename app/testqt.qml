@@ -206,10 +206,13 @@ ApplicationWindow {
 //						for(var i = 0; i < get(0).path.length; i++){
 //							console.log("", get(0).path[i])
 //						}
-//						console.log("1st instruction: ", get(0).segments[map.segmentcounter].maneuver.instructionText)
-//                        for( i = 0; i < routeModel.get(0).segments.length; i++){
-//                            console.log("direction:", routeModel.get(0).segments[i].direction)
-//                        }
+                        console.log("1st instruction: ", get(0).segments[map.segmentcounter].maneuver.instructionText)
+                        for( var i = 0; i < routeModel.get(0).segments.length; i++){
+                            console.log("segments[",i,"].maneuver.direction:" ,routeModel.get(0).segments[i].maneuver.direction)
+                            console.log("segments[",i,"].maneuver.instructionText:" ,routeModel.get(0).segments[i].maneuver.instructionText)
+                            console.log("segments[",i,"].maneuver.path[0]:" ,routeModel.get(0).segments[i].path[0])
+                            markerModel.addMarker(routeModel.get(0).segments[i].path[0]) // for debug
+                        }
                         break
 					}
 				} else if (status == RouteModel.Error) {
@@ -307,7 +310,7 @@ ApplicationWindow {
             pathcounter = 0
             segmentcounter = 0
             routeModel.update();
-markerModel.removeMarker();
+            markerModel.removeMarker();
        //     map.removeMapItem(markerModel);
 
             // remove MapItem
@@ -402,7 +405,7 @@ markerModel.removeMarker();
 			}
 			
 			onPressAndHold:{
-                if(btn_guidance.state !== "onGuide")
+                if(btn_guidance.state !== "onGuide" && btn_guidance.state !== "Routing")
                 {
                     if (Math.abs(map.pressX - mouse.x ) < map.jitterThreshold
                             && Math.abs(map.pressY - mouse.y ) < map.jitterThreshold) {
@@ -423,7 +426,7 @@ markerModel.removeMarker();
 			console.log("updatePositon")
             if(pathcounter <= routeModel.get(0).path.length - 1){
                 console.log("path: ", pathcounter, "/", routeModel.get(0).path.length - 1, "", routeModel.get(0).path[pathcounter])
-//                console.log("from_to:",map.currentpostion.latitude,",",map.currentpostion.longitude,",",routeModel.get(0).path[pathcounter].latitude,",",routeModel.get(0).path[pathcounter].longitude)
+                console.log("from_to:",map.currentpostion.latitude,",",map.currentpostion.longitude,",",routeModel.get(0).path[pathcounter].latitude,",",routeModel.get(0).path[pathcounter].longitude)
                 // calculate distance
                 var next_distance = calculateDistance(map.currentpostion.latitude,
                                                       map.currentpostion.longitude,
@@ -472,7 +475,13 @@ markerModel.removeMarker();
                         if(segmentcounter < routeModel.get(0).segments.length - 1){
                             segmentcounter++
                         }
+                        if(segmentcounter === routeModel.get(0).segments.length - 1){
+                            img_destination_direction.state = "12"
+                        }else{
+                            img_destination_direction.state = routeModel.get(0).segments[segmentcounter].maneuver.direction
+                        }
                     }
+
                     // calculate next cross distance
                     var next_cross_distance = calculateDistance(map.currentpostion.latitude,
                                                                 map.currentpostion.longitude,

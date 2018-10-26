@@ -107,7 +107,7 @@ Item {
             PropertyChanges { target: guidance; visible: false }
             PropertyChanges { target: guidance; x: 0 }
             PropertyChanges { target: progress_next_cross; state: "visible" }
-            PropertyChanges { target: img_destination_direction; state: "1" }
+            PropertyChanges { target: img_destination_direction; state: "0" }
         }
     ]
 

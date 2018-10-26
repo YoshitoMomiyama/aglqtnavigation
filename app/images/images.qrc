@@ -18,5 +18,17 @@
         <file>207px-Car_icon_top.svg.png</file>
         <file>181px-u-turn.svg.png</file>
         <file>Dest_Flag.jpg</file>
+        <file>1_uturn.png</file>
+        <file>2_sharp_right.png</file>
+        <file>3_right.png</file>
+        <file>4_slight_right.png</file>
+        <file>5_straight.png</file>
+        <file>6_slight_left.png</file>
+        <file>7_left.png</file>
+        <file>8_sharp_left.png</file>
+        <file>9_7_uturn_left.png</file>
+        <file>10_11_bear_left_112px-Signal_C117a.svg.png</file>
+        <file>11_2_bear_right_112px-Signal_C117a.svg.png</file>
+        <file>SW_Patern_3.bmp</file>
     </qresource>
 </RCC>
