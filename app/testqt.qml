@@ -208,9 +208,9 @@ ApplicationWindow {
 //						}
                         console.log("1st instruction: ", get(0).segments[map.segmentcounter].maneuver.instructionText)
                         for( var i = 0; i < routeModel.get(0).segments.length; i++){
-                            console.log("segments[",i,"].maneuver.direction:" ,routeModel.get(0).segments[i].maneuver.direction)
-                            console.log("segments[",i,"].maneuver.instructionText:" ,routeModel.get(0).segments[i].maneuver.instructionText)
-                            console.log("segments[",i,"].maneuver.path[0]:" ,routeModel.get(0).segments[i].path[0])
+//                            console.log("segments[",i,"].maneuver.direction:" ,routeModel.get(0).segments[i].maneuver.direction)
+//                            console.log("segments[",i,"].maneuver.instructionText:" ,routeModel.get(0).segments[i].maneuver.instructionText)
+//                            console.log("segments[",i,"].maneuver.path[0]:" ,routeModel.get(0).segments[i].path[0].latitude,",",routeModel.get(0).segments[i].path[0].longitude)
                             markerModel.addMarker(routeModel.get(0).segments[i].path[0]) // for debug
                         }
                         break
@@ -405,7 +405,7 @@ ApplicationWindow {
 			}
 			
 			onPressAndHold:{
-                if(btn_guidance.state !== "onGuide" && btn_guidance.state !== "Routing")
+                if(btn_guidance.state !== "onGuide")
                 {
                     if (Math.abs(map.pressX - mouse.x ) < map.jitterThreshold
                             && Math.abs(map.pressY - mouse.y ) < map.jitterThreshold) {
@@ -425,22 +425,28 @@ ApplicationWindow {
 		{
 			console.log("updatePositon")
             if(pathcounter <= routeModel.get(0).path.length - 1){
-                console.log("path: ", pathcounter, "/", routeModel.get(0).path.length - 1, "", routeModel.get(0).path[pathcounter])
-                console.log("from_to:",map.currentpostion.latitude,",",map.currentpostion.longitude,",",routeModel.get(0).path[pathcounter].latitude,",",routeModel.get(0).path[pathcounter].longitude)
+//                console.log("path: ", pathcounter, "/", routeModel.get(0).path.length - 1, " segment: ", segmentcounter, "/", routeModel.get(0).segments.length - 1)
+//                console.log("from_to:",map.currentpostion.latitude,",",map.currentpostion.longitude,",",routeModel.get(0).path[pathcounter].latitude,",",routeModel.get(0).path[pathcounter].longitude)
                 // calculate distance
                 var next_distance = calculateDistance(map.currentpostion.latitude,
                                                       map.currentpostion.longitude,
                                                       routeModel.get(0).path[pathcounter].latitude,
                                                       routeModel.get(0).path[pathcounter].longitude);
-                console.log("next_distance:",next_distance);
+//                console.log("next_distance:",next_distance);
 
                 // calculate direction
                 var next_direction = calculateDirection(map.currentpostion.latitude,
                                                         map.currentpostion.longitude,
                                                         routeModel.get(0).path[pathcounter].latitude,
                                                         routeModel.get(0).path[pathcounter].longitude);
-                console.log("next_direction:",next_direction);
+//                console.log("next_direction:",next_direction);
 
+                // calculate next cross distance
+                var next_cross_distance = calculateDistance(map.currentpostion.latitude,
+                                                            map.currentpostion.longitude,
+                                                            routeModel.get(0).segments[segmentcounter].path[0].latitude,
+                                                            routeModel.get(0).segments[segmentcounter].path[0].longitude);
+//                console.log("next_cross_distance:",next_cross_distance);
                 // set next coordidnate
                 if(next_distance < 25)
                 {
@@ -455,7 +461,7 @@ ApplicationWindow {
                 }else{
                     setNextCoordinate(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,20)
                 }
-                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
+//                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
 
                 // car_position_mapitem angle
                 root.car_direction = next_direction
@@ -466,12 +472,11 @@ ApplicationWindow {
                     map.center = map.currentpostion
                 }
 
-
                 // report a new instruction if current position matches with the head position of the segment
                 if(segmentcounter <= routeModel.get(0).segments.length - 1){
-                    if(map.currentpostion === routeModel.get(0).segments[segmentcounter].path[0]){
-                        console.log("new segment: ", segmentcounter, "/", routeModel.get(0).segments.length - 1)
-                        console.log("instruction: ", routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                     if(next_cross_distance < 25){
+//                      console.log("new segment instruction: ", routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                        progress_next_cross.setProgress(0)
                         if(segmentcounter < routeModel.get(0).segments.length - 1){
                             segmentcounter++
                         }
@@ -480,20 +485,11 @@ ApplicationWindow {
                         }else{
                             img_destination_direction.state = routeModel.get(0).segments[segmentcounter].maneuver.direction
                         }
+                    }else{
+                        // update progress_next_cross
+                        progress_next_cross.setProgress(next_cross_distance)
                     }
-
-                    // calculate next cross distance
-                    var next_cross_distance = calculateDistance(map.currentpostion.latitude,
-                                                                map.currentpostion.longitude,
-                                                                routeModel.get(0).segments[segmentcounter].path[0].latitude,
-                                                                routeModel.get(0).segments[segmentcounter].path[0].longitude);
-                    console.log("next_cross_distance:",next_cross_distance);
-
-                    // update progress_next_cross
-                    progress_next_cross.setProgress(next_cross_distance)
-
                 }
-
             }
 		}
 	}
