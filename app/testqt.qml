@@ -175,15 +175,17 @@ ApplicationWindow {
             }
         }
 
-        //MapQuickItem {
-        //    id: icon_destination_point
-        //    sourceItem: Image {
-        //        id: icon_destination_point_image
-        //        width: 32
-        //        height: 32
-        //        source: "images/240px-HEB_project_flow_icon_04_checkered_flag.svg.png"
-        //    }
-        //}
+        MapQuickItem {
+            id: icon_segment_point
+            sourceItem: Image {
+                id: icon_segment_point_image
+                width: 64
+                height: 64
+                x: -32
+                y: -44
+                source: "images/Map_symbol_location_02.png"
+            }
+        }
 
 		RouteModel {
 			id: routeModel
@@ -316,6 +318,7 @@ ApplicationWindow {
             // remove MapItem
             map.removeMapItem(icon_start_point)
             map.removeMapItem(icon_end_point)
+            map.removeMapItem(icon_segment_point)
 
             // update car_position_mapitem angle
             root.car_direction = root.default_car_direction
@@ -482,8 +485,11 @@ ApplicationWindow {
                         }
                         if(segmentcounter === routeModel.get(0).segments.length - 1){
                             img_destination_direction.state = "12"
+                            map.removeMapItem(icon_segment_point)
                         }else{
                             img_destination_direction.state = routeModel.get(0).segments[segmentcounter].maneuver.direction
+                            icon_segment_point.coordinate = routeModel.get(0).segments[segmentcounter].path[0]
+                            map.addMapItem(icon_segment_point)
                         }
                     }else{
                         // update progress_next_cross
