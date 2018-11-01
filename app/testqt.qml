@@ -171,7 +171,7 @@ ApplicationWindow {
                 id: icon_end_point_image
                 width: 32
                 height: 32
-                source: "images/240px-HEB_project_flow_icon_04_checkered_flag.svg.png"
+                source: "images/Map_marker_icon_–_Nicolas_Mollet_–_Flag_–_Tourism_–_Classic.png"
             }
         }
 
@@ -213,7 +213,7 @@ ApplicationWindow {
 //                            console.log("segments[",i,"].maneuver.direction:" ,routeModel.get(0).segments[i].maneuver.direction)
 //                            console.log("segments[",i,"].maneuver.instructionText:" ,routeModel.get(0).segments[i].maneuver.instructionText)
 //                            console.log("segments[",i,"].maneuver.path[0]:" ,routeModel.get(0).segments[i].path[0].latitude,",",routeModel.get(0).segments[i].path[0].longitude)
-                            markerModel.addMarker(routeModel.get(0).segments[i].path[0]) // for debug
+//                            markerModel.addMarker(routeModel.get(0).segments[i].path[0]) // for debug
                         }
                         break
 					}

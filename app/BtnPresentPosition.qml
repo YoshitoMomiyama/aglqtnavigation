@@ -12,7 +12,7 @@ Item {
 
         function present_position_clicked() {
             map.center = map.currentpostion
-            map.zoomLevel = root.default_zoom_level
+//            map.zoomLevel = root.default_zoom_level
             btn_present_position.state = "Flowing"
         }
         onClicked: { present_position_clicked() }
