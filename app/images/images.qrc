@@ -32,5 +32,10 @@
         <file>SW_Patern_3.bmp</file>
         <file>Map_symbol_location_02.png</file>
         <file>Map_marker_icon_–_Nicolas_Mollet_–_Flag_–_Tourism_–_Classic.png</file>
+        <file>RestaurantMapIcon.png</file>
+        <file>SupermarketMapIcon.png</file>
+        <file>BuildingIcon.png</file>
+        <file>ChurchIcon.png</file>
+        <file>Flag-export_lightblue.png</file>
     </qresource>
 </RCC>
