@@ -30,15 +30,31 @@
 #include <QtQuickControls2/QQuickStyle>
 #include <QQuickWindow>
 #include <QTimerEvent>
-
+#include <QtDBus/QDBusConnection>
 #include "markermodel.h"
+#include "dbus_server.h"
 
 int main(int argc, char *argv[])
 {
+
+    // for dbusIF
+    QString pathBase = "com.poiservice.";
+    QString objBase = "/com/poiservice/";
+    QString	serverName = "poiserver";
+
+    if (!QDBusConnection::sessionBus().isConnected()) {
+        qWarning("Cannot connect to the D-Bus session bus.\n"
+                 "Please check your system settings and try again.\n");
+        return 1;
+    }
+
+
 #if defined(AGL)
     AGLApplication app(argc, argv);
     app.setApplicationName("testqt");
     app.setupApplicationRole("testqt");
+
+    DBus_Server dbus(pathBase,objBase,serverName,&app);
 
     app.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
     return app.exec();
@@ -47,6 +63,8 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     app.setApplicationName("testqt");
+
+    DBus_Server dbus(pathBase,objBase,serverName,&app);
 
     MarkerModel model;
     engine.rootContext()->setContextProperty("markerModel", &model);

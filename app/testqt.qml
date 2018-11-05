@@ -319,13 +319,12 @@ ApplicationWindow {
             segmentcounter = 0
             routeModel.update();
             markerModel.removeMarker();
-       //     map.removeMapItem(markerModel);
+            map.removeMapItem(markerModel);
 
             // remove MapItem
             map.removeMapItem(icon_start_point)
             map.removeMapItem(icon_end_point)
             map.removeMapItem(icon_segment_point)
-            map.removeMapItem(poi_icon) // for Debug
 
             // update car_position_mapitem angle
             root.car_direction = root.default_car_direction
