@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     // for dbusIF
     QString pathBase = "com.poiservice.";
     QString objBase = "/com/poiservice/";
-    QString	serverName = "poiserver";
+    QString	serverName = "test";
 
     if (!QDBusConnection::sessionBus().isConnected()) {
         qWarning("Cannot connect to the D-Bus session bus.\n"

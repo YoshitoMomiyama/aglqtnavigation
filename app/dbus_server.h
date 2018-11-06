@@ -1,15 +1,15 @@
 #ifndef DBUS_SERVER_H
 #define DBUS_SERVER_H
-#include "dbusinterface/com.poiservice.POIContentAccessModule.h"
-#include "dbusinterface/POIContentAccessModule_adapter.h"
+#include "test_interface.h"
+#include "test_adaptor.h"
 
 class DBus_Server : public QObject{
 
     Q_OBJECT
 
-    QString	m_pathNameBase;
-    QString	m_objNameBase;
     QString m_serverName;
+    QString m_pathName;
+    QString m_objName;
 
 public:
     DBus_Server(const QString &pathName,

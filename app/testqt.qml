@@ -45,6 +45,7 @@ ApplicationWindow {
 		property int pressY : -1
 		property int jitterThreshold : 30
         property variant currentpostion : QtPositioning.coordinate(car_position_lat, car_position_lon)
+        property var poiArray: new Array
 
         width: 1080
 		height: 1488
@@ -287,9 +288,9 @@ ApplicationWindow {
 
                 var waypointlist = routeQuery.waypoints
                 for(var i=1; i<waypoint_count; i++) {
-//                    markerModel.addMarker(waypointlist[i])
+                    markerModel.addMarker(waypointlist[i])
 
-                    map.addPoiIcon(waypointlist[i].latitude,waypointlist[i].longitude,i % 5) // for Debug
+//                    map.addPoiIcon(waypointlist[i].latitude,waypointlist[i].longitude,i % 5) // for Debug
                 }
 
                 routeModel.update()
@@ -325,6 +326,10 @@ ApplicationWindow {
             map.removeMapItem(icon_start_point)
             map.removeMapItem(icon_end_point)
             map.removeMapItem(icon_segment_point)
+
+            // for Debug
+//            while(poiArray.length>0)
+//                map.removeMapItem(poiArray.pop())
 
             // update car_position_mapitem angle
             root.car_direction = root.default_car_direction
@@ -492,6 +497,7 @@ ApplicationWindow {
 
             poiItem.coordinate = QtPositioning.coordinate(lat, lon);
             map.addMapItem(poiItem);
+            poiArray.push(poiItem);
             console.log("success creating object");
             return true;
         }

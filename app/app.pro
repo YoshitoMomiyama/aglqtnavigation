@@ -10,20 +10,17 @@ CONFIG += c++11 link_pkgconfig
 
 HEADERS += \
     markermodel.h \
-    dbus_server.h \
-    dbusinterface/com.poiservice.POIContentAccessModule.h \
-    dbusinterface/POIContentAccessModule_adapter.h
+    dbus_server.h
 
 SOURCES += main.cpp \
-    dbus_server.cpp \
-    dbusinterface/POIContentAccessModule_adapter.cpp \
-    dbusinterface/com.poiservice.POIContentAccessModule.cpp
+    dbus_server.cpp
 
 RESOURCES += \
     testqt.qrc \
     images/images.qrc
 
+DBUS_ADAPTORS += dbusinterface/com.poiservice.test.xml
+DBUS_INTERFACES += dbusinterface/com.poiservice.test.xml
+
 include(app.pri)
 
-DISTFILES += \
-    dbusinterface/poi_contentaccessmodule.xml
