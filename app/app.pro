@@ -3,6 +3,7 @@ QT = quick qml
 #QT += aglextras
 QT += positioning
 QT += dbus
+QT += core
 CONFIG += c++11 link_pkgconfig
 #PKGCONFIG += 
 
@@ -10,7 +11,8 @@ CONFIG += c++11 link_pkgconfig
 
 HEADERS += \
     markermodel.h \
-    dbus_server.h
+    dbus_server.h \
+    guidance_module.h
 
 SOURCES += main.cpp \
     dbus_server.cpp

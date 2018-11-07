@@ -606,6 +606,8 @@ ApplicationWindow {
                             img_destination_direction.state = routeModel.get(0).segments[segmentcounter].maneuver.direction
                             icon_segment_point.coordinate = routeModel.get(0).segments[segmentcounter].path[0]
                             map.addMapItem(icon_segment_point)
+                            console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                            guidanceModule.guidance(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
                         }
                     }else{
                         // update progress_next_cross

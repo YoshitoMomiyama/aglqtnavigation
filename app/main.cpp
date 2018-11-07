@@ -33,6 +33,7 @@
 #include <QtDBus/QDBusConnection>
 #include "markermodel.h"
 #include "dbus_server.h"
+#include "guidance_module.h"
 
 int main(int argc, char *argv[])
 {
@@ -68,6 +69,9 @@ int main(int argc, char *argv[])
 
     MarkerModel model;
     engine.rootContext()->setContextProperty("markerModel", &model);
+
+    Guidance_Module guidance;
+    engine.rootContext()->setContextProperty("guidanceModule", &guidance);
 
     engine.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
     return app.exec();
