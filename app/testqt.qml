@@ -290,7 +290,7 @@ ApplicationWindow {
                 for(var i=1; i<waypoint_count; i++) {
                     markerModel.addMarker(waypointlist[i])
 
-//                    map.addPoiIcon(waypointlist[i].latitude,waypointlist[i].longitude,i % 5) // for Debug
+//                    map.addPoiIconSLOT(waypointlist[i].latitude,waypointlist[i].longitude,i % 5) // for Debug
                 }
 
                 routeModel.update()
@@ -397,7 +397,8 @@ ApplicationWindow {
             map.currentpostion = QtPositioning.coordinate(curlat+addlat, curlon+addlon);
         }
 
-        function addPoiIcon(lat,lon,type) {
+        function addPoiIconSLOT(lat,lon,type) {
+            console.log("called addPoiIcon")
             var poiItem;
             switch(type){
                 case 0:
@@ -498,7 +499,7 @@ ApplicationWindow {
             poiItem.coordinate = QtPositioning.coordinate(lat, lon);
             map.addMapItem(poiItem);
             poiArray.push(poiItem);
-            console.log("success creating object");
+//            console.log("success creating object");
             return true;
         }
 
@@ -542,7 +543,7 @@ ApplicationWindow {
         }
 		function updatePositon()
 		{
-			console.log("updatePositon")
+//			console.log("updatePositon")
             if(pathcounter <= routeModel.get(0).path.length - 1){
 //                console.log("path: ", pathcounter, "/", routeModel.get(0).path.length - 1, " segment: ", segmentcounter, "/", routeModel.get(0).segments.length - 1)
 //                console.log("from_to:",map.currentpostion.latitude,",",map.currentpostion.longitude,",",routeModel.get(0).path[pathcounter].latitude,",",routeModel.get(0).path[pathcounter].longitude)
@@ -614,7 +615,13 @@ ApplicationWindow {
                 }
             }
 		}
-	}
+        function removePoiIcons(category_id){
+            console.log("called removePoiIcons")
+            while(poiArray.length>0)
+                map.removeMapItem(poiArray.pop())
+        }
+
+    }
 		
     BtnPresentPosition {
         id: btn_present_position

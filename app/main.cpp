@@ -54,9 +54,10 @@ int main(int argc, char *argv[])
     app.setApplicationName("testqt");
     app.setupApplicationRole("testqt");
 
+    app.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
+
     DBus_Server dbus(pathBase,objBase,serverName,&app);
 
-    app.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
     return app.exec();
 #else
     QGuiApplication app(argc, argv);
@@ -64,12 +65,14 @@ int main(int argc, char *argv[])
 
     app.setApplicationName("testqt");
 
-    DBus_Server dbus(pathBase,objBase,serverName,&app);
 
     MarkerModel model;
     engine.rootContext()->setContextProperty("markerModel", &model);
 
     engine.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
+    QObject *root = engine.rootObjects().first();
+    DBus_Server dbus(pathBase,objBase,serverName,root);
+
     return app.exec();
 #endif
 }
