@@ -74,8 +74,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("guidanceModule", &guidance);
 
     engine.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
-    QObject *root = engine.rootObjects().first();
-    DBus_Server dbus(pathBase,objBase,serverName,root);
+    QObject *map = engine.rootObjects().first()->findChild<QObject*>("map");
+    DBus_Server dbus(pathBase,objBase,serverName,map);
 
     return app.exec();
 #endif

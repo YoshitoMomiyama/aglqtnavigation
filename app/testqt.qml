@@ -57,6 +57,7 @@ ApplicationWindow {
         center: QtPositioning.coordinate(car_position_lat, car_position_lon)
         zoomLevel: default_zoom_level
         bearing: 0
+        objectName: "map"
 
 		GeocodeModel {
 			id: geocodeModel
@@ -617,7 +618,7 @@ ApplicationWindow {
                 }
             }
 		}
-        function removePoiIcons(category_id){
+        function removePoiIconsSLOT(category_id){
             console.log("called removePoiIcons")
             while(poiArray.length>0)
                 map.removeMapItem(poiArray.pop())
