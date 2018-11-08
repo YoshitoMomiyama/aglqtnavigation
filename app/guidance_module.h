@@ -47,7 +47,7 @@ public:
             //**************************************************************************
             if(g_voicelanguage == SYS_LANGUAGE_JP) {
                 strncat(tts_voice, "sh jtalk '", (TTSMAX - len - 1));
-            } else if(g_voicelanguage == SY・S_LANGUAGE_EN)  {
+            } else if(g_voicelanguage == SYS_LANGUAGE_EN)  {
                 strncat(tts_voice, "sh flite '", (TTSMAX - len - 1));
             }
 
