@@ -2,11 +2,10 @@ import QtQuick 2.0
 import QtQuick.Controls 1.5
 
 Item {
-	Button {
+    Button {
 		id: btn_map_direction
 		width: 100
 		height: 100
-//        property bool heading_up: false
 
 		function settleState() {
             if(root.st_heading_up){

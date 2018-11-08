@@ -2,53 +2,22 @@ import QtQuick 2.0
 
 Item {
 	id: img_destination_direction
-
-	width: childrenRect.width
-	height: childrenRect.height
-
+    width: 100
+    height: 100
     visible: false
 
-//    function settleState() {
-//        if(img_destination_direction.state == "0"){
-//            img_destination_direction.state = "1";
-//        } else if(img_destination_direction.state == "1"){
-//            img_destination_direction.state = "2";
-//        } else if(img_destination_direction.state == "2"){
-//            img_destination_direction.state = "3";
-//        } else if(img_destination_direction.state == "3"){
-//            img_destination_direction.state = "4";
-//        } else if(img_destination_direction.state == "4"){
-//            img_destination_direction.state = "5";
-//        } else if(img_destination_direction.state == "5"){
-//            img_destination_direction.state = "6";
-//        } else if(img_destination_direction.state == "6"){
-//            img_destination_direction.state = "7";
-//        } else if(img_destination_direction.state == "7"){
-//            img_destination_direction.state = "8";
-//        } else if(img_destination_direction.state == "8"){
-//            img_destination_direction.state = "9";
-//        } else if(img_destination_direction.state == "9"){
-//            img_destination_direction.state = "10";
-//        } else if(img_destination_direction.state == "10"){
-//            img_destination_direction.state = "11";
-//        } else {
-//            img_destination_direction.state = "0";
-//        }
-//    }
+    Rectangle {
+        width: parent.width
+        height: parent.height
+        color: "#a0a0a0"
 
-	Image {
-		id: direction
-		x: 0
-		y: 0
-		width: 100
-		height: 100
-        source: "images/SW_Patern_3.bmp"
-
-		MouseArea {
-			anchors.fill: parent
-//            onClicked: { settleState() }
-		}
-	}
+        Image {
+            id: direction
+            anchors.fill: parent
+            anchors.margins: 1
+            source: "images/SW_Patern_3.bmp"
+        }
+    }
 
 	states: [
         State {

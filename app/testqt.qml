@@ -24,11 +24,12 @@ ApplicationWindow {
 	id: root
 	visible: true
 	width: 1080
-	height: 1488
+    height: 1488
+//    height: 680 //debug
 	title: qsTr("TestQt")
 
-    property real car_position_lat: 36.131516     // Las Vegas Convention Center
-    property real car_position_lon: -115.151507
+    property real car_position_lat: 36.136261     // Las Vegas Convention Center
+    property real car_position_lon: -115.151254
     property real car_direction: 0  //Noth
     property bool st_heading_up: false
     property real default_zoom_level : 18
@@ -47,8 +48,8 @@ ApplicationWindow {
         property variant currentpostion : QtPositioning.coordinate(car_position_lat, car_position_lon)
         property var poiArray: new Array
 
-        width: 1080
-		height: 1488
+        width: parent.width
+        height: parent.height
 		plugin: Plugin {
 			name: "mapbox"
 			PluginParameter { name: "mapbox.access_token";
@@ -106,15 +107,15 @@ ApplicationWindow {
             id: poi
             sourceItem: Rectangle { width: 14; height: 14; color: "#e41e25"; border.width: 2; border.color: "white"; smooth: true; radius: 7 }
             coordinate {
-                latitude: 36.131516
-                longitude: -115.151507
+                latitude: 36.136261
+                longitude: -115.151254
             }
             opacity: 1.0
             anchorPoint: Qt.point(sourceItem.width/2, sourceItem.height/2)
         }
         MapQuickItem {
             sourceItem: Text{
-                text: "Convention Center"
+                text: "Westgate"
                 color:"#242424"
                 font.bold: true
                 styleColor: "#ECECEC"
@@ -628,46 +629,57 @@ ApplicationWindow {
 		
     BtnPresentPosition {
         id: btn_present_position
-        x: 942
-    //		y: 1328
-        y: 530      // for debug
+        anchors.right: parent.right
+        anchors.rightMargin: 125
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 125
     }
 
 	BtnMapDirection {
         id: btn_map_direction
-		x: 15
-		y: 20
+        anchors.top: parent.top
+        anchors.topMargin: 25
+        anchors.left: parent.left
+        anchors.leftMargin: 25
 	}
 
     BtnGuidance {
         id: btn_guidance
-		x: 940
-		y: 20
+        anchors.top: parent.top
+        anchors.topMargin: 25
+        anchors.right: parent.right
+        anchors.rightMargin: 125
 	}
 
 	BtnShrink {
         id: btn_shrink
-		x: 23
-//		y:1200
-        y:400   // for debug
+        anchors.left: parent.left
+        anchors.leftMargin: 25
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 250
 	}
 
 	BtnEnlarge {
         id: btn_enlarge
-		x: 23
-//		y: 1330
-        y:530   // for debug
+        anchors.left: parent.left
+        anchors.leftMargin: 25
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 125
 	}
 
 	ImgDestinationDirection {
         id: img_destination_direction
-		x: 120
-		y: 20
+        anchors.top: parent.top
+        anchors.topMargin: 25
+        anchors.left: parent.left
+        anchors.leftMargin: 150
 	}
 
     ProgressNextCross {
         id: progress_next_cross
-		x: 225
-		y: 20
+        anchors.top: parent.top
+        anchors.topMargin: 25
+        anchors.left: img_destination_direction.right
+        anchors.leftMargin: 20
 	}
 }
