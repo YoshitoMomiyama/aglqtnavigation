@@ -49,23 +49,16 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-
 #if defined(AGL)
     AGLApplication app(argc, argv);
     app.setApplicationName("testqt");
     app.setupApplicationRole("testqt");
-
-    app.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
-
-    DBus_Server dbus(pathBase,objBase,serverName,&app);
-
-    return app.exec();
 #else
     QGuiApplication app(argc, argv);
-    QQmlApplicationEngine engine;
-
     app.setApplicationName("testqt");
+#endif
 
+    QQmlApplicationEngine engine;
 
     MarkerModel model;
     engine.rootContext()->setContextProperty("markerModel", &model);
@@ -78,6 +71,5 @@ int main(int argc, char *argv[])
     DBus_Server dbus(pathBase,objBase,serverName,map);
 
     return app.exec();
-#endif
 }
 

@@ -1,4 +1,8 @@
 TEMPLATE = subdirs
 SUBDIRS = app
-#SUBDIRS += package
+
+equals(DEFINES, "AGL"){
+    SUBDIRS += package
+}
+
 package.depends += app

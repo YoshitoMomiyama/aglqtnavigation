@@ -1,13 +1,14 @@
 TARGET = testqt
 QT = quick qml
-#QT += aglextras
+
+equals(DEFINES, "AGL"){
+    QT += aglextras
+}
+
 QT += positioning
 QT += dbus
 QT += core
 CONFIG += c++11 link_pkgconfig
-#PKGCONFIG += 
-
-#HEADERS += 
 
 HEADERS += \
     markermodel.h \

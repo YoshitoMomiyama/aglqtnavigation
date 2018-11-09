@@ -7,6 +7,16 @@
 #define SYS_LANGUAGE_EN   2
 #define TTSMAX (2048)
 
+#if defined(AGL)
+//**************************************************************************
+// ■AGL operation
+// Local operation Comment out the following definitions and
+// then cancel the following comment out
+//**************************************************************************
+#define NAVI_AGL_DEFAULT_PATH_JAPAN	"/var/mapdata/navi_data/japan_TR9"
+#define NAVI_AGL_DEFAULT_PATH_UK	"/var/mapdata/navi_data_UK/UnitedKingdom_TR9"
+
+#else
 //**************************************************************************
 // ■Local operation
 // To output the audio file, please place the following file
@@ -17,13 +27,7 @@
 #define NAVI_AGL_DEFAULT_PATH_JAPAN	"japan_TR9"
 #define NAVI_AGL_DEFAULT_PATH_UK	"UnitedKingdom_TR9"
 
-//**************************************************************************
-// ■AGL operation
-// Local operation Comment out the following definitions and
-// then cancel the following comment out
-//**************************************************************************
-//#define NAVI_AGL_DEFAULT_PATH_JAPAN	"/var/mapdata/navi_data/japan_TR9"
-//#define NAVI_AGL_DEFAULT_PATH_UK	"/var/mapdata/navi_data_UK/UnitedKingdom_TR9"
+#endif
 
 class Guidance_Module : public QObject
 {
