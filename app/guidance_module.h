@@ -20,7 +20,7 @@
 //**************************************************************************
 // ■Local operation
 // To output the audio file, please place the following file
-// under [build-testqt-Desktop_Qt_5_9_6_GCC_64bit-Release/package/root/bin]
+// under [build-navigation-Desktop_Qt_5_9_6_GCC_64bit-Release/package/root/bin]
 // · For Japanese output: japan_TR 9
 // · For English output: UnitedKingdom_TR 9
 //**************************************************************************
@@ -47,7 +47,7 @@ public:
             // ・flite
             //
             // Please place the copied file below.
-            // [build-testqt-Desktop_Qt_5_9_6_GCC_64bit-Release/package/root/bin]
+            // [build-navigation-Desktop_Qt_5_9_6_GCC_64bit-Release/package/root/bin]
             //**************************************************************************
             if(g_voicelanguage == SYS_LANGUAGE_JP) {
                 strncat(tts_voice, "sh jtalk '", (TTSMAX - len - 1));

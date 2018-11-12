@@ -1,4 +1,4 @@
-TARGET = testqt
+TARGET = navigation
 QT = quick qml
 
 equals(DEFINES, "AGL"){
@@ -19,7 +19,7 @@ SOURCES += main.cpp \
     dbus_server.cpp
 
 RESOURCES += \
-    testqt.qrc \
+    navigation.qrc \
     images/images.qrc
 
 DBUS_ADAPTORS += dbusinterface/com.poiservice.test.xml

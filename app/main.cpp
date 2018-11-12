@@ -51,11 +51,11 @@ int main(int argc, char *argv[])
 
 #if defined(AGL)
     AGLApplication app(argc, argv);
-    app.setApplicationName("testqt");
-    app.setupApplicationRole("testqt");
+    app.setApplicationName("navigation");
+    app.setupApplicationRole("navigation");
 #else
     QGuiApplication app(argc, argv);
-    app.setApplicationName("testqt");
+    app.setApplicationName("navigation");
 #endif
 
     QQmlApplicationEngine engine;
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     Guidance_Module guidance;
     engine.rootContext()->setContextProperty("guidanceModule", &guidance);
 
-    engine.load(QUrl(QStringLiteral("qrc:/testqt.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/navigation.qml")));
     QObject *map = engine.rootObjects().first()->findChild<QObject*>("map");
     DBus_Server dbus(pathBase,objBase,serverName,map);
 

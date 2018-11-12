@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" id="testqt" version="0.1">
-  <name>testqt</name>
+<widget xmlns="http://www.w3.org/ns/widgets" id="navigation" version="0.1">
+  <name>navigation</name>
   <icon src="icon.svg"/>
-  <content src="bin/testqt" type="application/vnd.agl.native"/>
-  <description>This is a demo testqt application</description>
+  <content src="bin/navigation" type="application/vnd.agl.native"/>
+  <description>This is a demo navigation application</description>
   <author>Qt</author>
   <license>APL 2.0</license>
   <feature name="urn:AGL:widget:required-api">

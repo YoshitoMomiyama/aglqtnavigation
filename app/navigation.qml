@@ -26,7 +26,7 @@ ApplicationWindow {
 	width: 1080
     height: 1488
 //    height: 680 //debug
-	title: qsTr("TestQt")
+	title: qsTr("navigation")
 
     property real car_position_lat: 36.136261     // Las Vegas Convention Center
     property real car_position_lon: -115.151254
