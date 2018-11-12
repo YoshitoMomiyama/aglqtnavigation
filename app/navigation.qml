@@ -20,6 +20,7 @@ import QtQuick.Controls 2.0
 import QtWebSockets 1.0
 import QtLocation 5.9
 import QtPositioning 5.6
+
 ApplicationWindow {
 	id: root
 	visible: true
@@ -30,7 +31,8 @@ ApplicationWindow {
 
     property real car_position_lat: 36.136261     // Las Vegas Convention Center
     property real car_position_lon: -115.151254
-    property real car_direction: 0  //Noth
+    property real car_direction: 0  //North
+    property real prev_car_direction: 0
     property bool st_heading_up: false
     property real default_zoom_level : 18
     property real default_car_direction : 0
@@ -154,7 +156,7 @@ ApplicationWindow {
                 }
             ]
             transitions: Transition {
-                NumberAnimation { properties: "angle"; easing.type: Easing.InOutQuad }
+                RotationAnimation { properties: "angle"; easing.type: Easing.InOutQuad }
             }
         }
 
@@ -184,12 +186,12 @@ ApplicationWindow {
 
         MapQuickItem {
             id: icon_segment_point
+            anchorPoint.x: icon_segment_point_image.width/2 - 5
+            anchorPoint.y: icon_segment_point_image.height/2 + 25
             sourceItem: Image {
                 id: icon_segment_point_image
                 width: 64
                 height: 64
-                x: -32
-                y: -44
                 source: "images/Map_symbol_location_02.png"
             }
         }
@@ -586,12 +588,15 @@ ApplicationWindow {
 //                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
 
                 // car_position_mapitem angle
+                root.prev_car_direction = root.car_direction
                 root.car_direction = next_direction
 
                 if(btn_present_position.state === "Flowing")
                 {
                     // update map.center
                     map.center = map.currentpostion
+
+                    rotateMapSmooth()
                 }
 
                 // report a new instruction if current position matches with the head position of the segment
@@ -625,6 +630,74 @@ ApplicationWindow {
                 map.removeMapItem(poiArray.pop())
         }
 
+        function rotateMapSmooth(){
+            var prev = root.prev_car_direction
+            var now = root.car_direction
+            var diff
+
+            if(root.st_heading_up){
+
+                diff = now - prev
+
+                if ( 180 < diff ){
+                    diff = diff - 360.0
+                } else if ( diff < -180 ){
+                    diff = diff + 360.0
+                }
+
+                //console.log("prev:", prev, ", now:", now, ", diff:", diff)
+
+                if( 0 < diff ){
+                    rot_anim.direction = RotationAnimation.Clockwise
+                } else {
+                    rot_anim.direction = RotationAnimation.Counterclockwise
+                }
+
+                map.state = "none"
+                map.state = "smooth_rotate"
+            }else{
+                diff = 0 - prev
+
+                if ( 180 < diff ){
+                    diff = diff - 360.0
+                } else if ( diff < -180 ){
+                    diff = diff + 360.0
+                }
+
+                //console.log("prev:", prev, ", now:", now, ", diff:", diff)
+                if( 0 < diff ){
+                    rot_anim.direction = RotationAnimation.Clockwise
+                } else {
+                    rot_anim.direction = RotationAnimation.Counterclockwise
+                }
+
+                map.state = "smooth_rotate_north"
+            }
+        }
+
+        states: [
+            State {
+                name: "none"
+            },
+            State {
+                name: "smooth_rotate"
+                PropertyChanges { target: map; bearing: root.car_direction }
+            },
+            State {
+                name: "smooth_rotate_north"
+                PropertyChanges { target: map; bearing: 0 }
+            }
+        ]
+
+        transitions: Transition {
+            NumberAnimation { properties: "center"; easing.type: Easing.InOutQuad }
+            RotationAnimation {
+                id: rot_anim
+                property: "bearing"
+                easing.type: Easing.InOutQuad
+                duration: 200
+            }
+        }
     }
 		
     BtnPresentPosition {

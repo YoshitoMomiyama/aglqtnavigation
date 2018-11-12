@@ -17,6 +17,7 @@ Item {
                 car_position_mapitem.state = "HeadingUp"
                 root.st_heading_up = true
 			}
+            map.rotateMapSmooth()
         }
 
 		onClicked: { settleState() }
@@ -34,17 +35,11 @@ Item {
 			State {
 				name: "HeadingUp"
                 PropertyChanges { target: image; source: "images/240px-Compass_icon_NE.svg.png" }
-                PropertyChanges { target: map; bearing: root.car_direction }
 			},
 			State {
 				name: "NorthUp"
                 PropertyChanges { target: image; source: "images/202px-Compass-icon_bb_N.svg.png" }
-                PropertyChanges { target: map; bearing: 0 }
-			}
+            }
 		]
-
-        transitions: Transition {
-            NumberAnimation { properties: "bearing"; easing.type: Easing.InOutQuad }
-        }
-	}
+    }
 }
