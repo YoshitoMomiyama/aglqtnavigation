@@ -1,7 +1,7 @@
 #ifndef DBUS_SERVER_H
 #define DBUS_SERVER_H
-#include "test_interface.h"
-#include "test_adaptor.h"
+#include "naviapi_interface.h"
+#include "naviapi_adaptor.h"
 #include <QtQml/QQmlApplicationEngine>
 
 class DBus_Server : public QObject{
