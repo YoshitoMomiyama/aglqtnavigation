@@ -1,6 +1,6 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
-        <interface name="com.poiservice.test">
+        <interface name="org.agl.naviapi">
 		<method name="addPOI">
 			<arg direction="in" name="category_id" type="u"/>
 			<arg direction="in" name="poi_Lat" type="d"/>

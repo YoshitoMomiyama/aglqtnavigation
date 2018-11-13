@@ -3,6 +3,7 @@ QT = quick qml
 
 equals(DEFINES, "AGL"){
     QT += aglextras
+    PKGCONFIG += qlibhomescreen qlibwindowmanager
 }
 
 QT += positioning
@@ -22,8 +23,8 @@ RESOURCES += \
     navigation.qrc \
     images/images.qrc
 
-DBUS_ADAPTORS += dbusinterface/com.poiservice.test.xml
-DBUS_INTERFACES += dbusinterface/com.poiservice.test.xml
+DBUS_ADAPTORS += dbusinterface/org.agl.naviapi.xml
+DBUS_INTERFACES += dbusinterface/org.agl.naviapi.xml
 
 include(app.pri)
 

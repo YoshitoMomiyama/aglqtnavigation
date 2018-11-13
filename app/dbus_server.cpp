@@ -16,7 +16,7 @@ DBus_Server::~DBus_Server(){}
 
 void DBus_Server::initDBus(){
 
-    new TestAdaptor(this);
+    new NaviapiAdaptor(this);
 
     if (!QDBusConnection::sessionBus().registerService(m_pathName))
         qDebug() << m_pathName << "registerService() failed";
@@ -27,7 +27,7 @@ void DBus_Server::initDBus(){
     if (!QDBusConnection::sessionBus().connect(
                 m_pathName,
                 m_objName,
-                com::poiservice::test::staticInterfaceName(),
+                org::agl::naviapi::staticInterfaceName(),
                 "addPOI",
                 this,
                 SLOT(addPOI(uint , double , double )))) {	//slot
@@ -37,7 +37,7 @@ void DBus_Server::initDBus(){
     if (!QDBusConnection::sessionBus().connect(
                 m_pathName,
                 m_objName,
-                com::poiservice::test::staticInterfaceName(),
+                org::agl::naviapi::staticInterfaceName(),
                 "removePOIs",
                 this,
                 SLOT(removePOIs(uint)))) {	//slot
