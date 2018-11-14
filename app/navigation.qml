@@ -55,7 +55,7 @@ ApplicationWindow {
 		plugin: Plugin {
 			name: "mapbox"
 			PluginParameter { name: "mapbox.access_token";
-			value: "pk.eyJ1IjoiYWlzaW53ZWkiLCJhIjoiY2pqNWg2cG81MGJoazNxcWhldGZzaDEwYyJ9.imkG45PQUKpgJdhO2OeADQ" }
+            value: fileOperation.getMapAccessToken() }
 		}
         center: QtPositioning.coordinate(car_position_lat, car_position_lon)
         zoomLevel: default_zoom_level
