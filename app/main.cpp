@@ -30,9 +30,6 @@
 #include <string>
 #include <ilm/ivi-application-client-protocol.h>
 #include <wayland-client.h>
-//#else	// for only libwindowmanager
-//#include <libwindowmanager.h>
-//#include <libhomescreen.hpp>
 #endif
 #include <QtCore/QDebug>
 #include <QtCore/QCommandLineParser>
@@ -43,63 +40,10 @@
 #include <QtQml/QQmlContext>
 #include <QtQuickControls2/QQuickStyle>
 #include <QQuickWindow>
-//#include <string>
-//#include <ilm/ivi-application-client-protocol.h>
-//#include <wayland-client.h>
-//#include "wmhandler.h"
 #include <QtDBus/QDBusConnection>
 #include "markermodel.h"
 #include "dbus_server.h"
 #include "guidance_module.h"
-
-//#if !USE_QTAGLEXTRAS && !USE_QLIBWINDOWMANAGER
-//using namespace std;
-//const char *main_role = "navigation";
-//long port = 1700;
-//LibWindowmanager *wm;
-//string token = string("hello");
-//int init_wm(LibWindowmanager *wm)
-//{
-//	if(wm->init(port, token.c_str()) != 0) {
-//		return -1;
-//	}
-//	int id = wm->requestSurface(main_role);
-//	fprintf(stderr, "[navigation]get surface(%d)\n", id);
-//	if(id < 0) {
-//		return -1;
-//	}else{
-//		char buf[65];   // surface id is under 64bit(1.84E19,) so 65 is sufficient for buffer
-//		snprintf(buf, 65, "%d", id);
-//		setenv("QT_IVI_SURFACE_ID", buf, 1);
-//	}
-//	WMHandler wmh;
-//	wmh.on_visible = [](const char* role, bool visible){
-//		;
-//	};
-//	wmh.on_sync_draw = [wm](const char* role, const char* area, Rect rect) {
-//		fprintf(stderr, "[navigation]endDraw(%s)\n", role);
-//		wm->endDraw(role);
-//	};
-//	wm->setEventHandler(wmh);
-//	return 0;
-//}
-//int init_hs(LibHomeScreen* hs)
-//{
-//	if(hs->init(port, token.c_str())!=0){
-//		return -1;
-//	}
-//	hs->set_event_handler(LibHomeScreen::Event_TapShortcut, [](json_object *object){
-//		const char *application_name = json_object_get_string(
-//			json_object_object_get(object, "application_name"));
-//		if(strcmp(application_name, "navigation") == 0)
-//		{
-//			fprintf(stderr, "[navigation]activateWindow @ TapShortcut)\n");
-//			wm->activateWindow(main_role);
-//		}
-//	});
-//	return 0;
-//}
-//#endif
 
 int main(int argc, char *argv[])
 {
@@ -203,29 +147,7 @@ int main(int argc, char *argv[])
 #else	// for only libwindowmanager
 	QGuiApplication app(argc, argv);
     app.setApplicationName("navigation");
-//	if(argc > 2){
-//		port = strtol(argv[1], NULL, 10);
-//		token = argv[2];
-//	}
-//	fprintf(stderr, "[navigation]app_name: %s, port: %d, token: %s.\n", main_role, port, token.c_str());
-//	// LibWM
-//	wm = new LibWindowmanager();
-//	if(init_wm(wm)!=0){
-//		fprintf(stderr, "[navigation]init_wm failed\n");
-//		return -1;
-//	}else{
-//		fprintf(stderr, "[navigation]init_wm OK\n");
-//	}
-//	// LibHS
-//	LibHomeScreen *hs = new LibHomeScreen();
-//	if(init_hs(hs)!=0){
-//		fprintf(stderr, "[navigation]init_hs failed\n");
-//		return -1;
-//	}else{
-//		fprintf(stderr, "[navigation]init_hs OK\n");
-//	}
-//	WmHandler *wmh = new WmHandler();
-//	wmh->init(wm, main_role);
+
 	// Load qml
 	QQmlApplicationEngine engine;
 

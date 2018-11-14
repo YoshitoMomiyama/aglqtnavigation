@@ -1,6 +1,7 @@
 #include <sys/stat.h>
 #include <QObject>
 #include <QString>
+#include <QDebug>
 
 #define SYS_LANGUAGE_INIT 0
 #define SYS_LANGUAGE_JP   1
@@ -13,8 +14,8 @@
 // Local operation Comment out the following definitions and
 // then cancel the following comment out
 //**************************************************************************
-#define NAVI_AGL_DEFAULT_PATH_JAPAN	"/var/mapdata/navi_data/japan_TR9"
-#define NAVI_AGL_DEFAULT_PATH_UK	"/var/mapdata/navi_data_UK/UnitedKingdom_TR9"
+#define NAVI_AGL_DEFAULT_PATH_JAPAN	"/etc/japan_TR9"
+#define NAVI_AGL_DEFAULT_PATH_UK	"/etc/UnitedKingdom_TR9"
 
 #else
 //**************************************************************************
@@ -72,6 +73,7 @@ public:
         ret = stat(NAVI_AGL_DEFAULT_PATH_UK, &sb);
         if (ret == 0) {
             g_voicelanguage = SYS_LANGUAGE_EN;
+            qDebug() << "UnitedKingdom_TR9 find";
 
             return ret;
         }
@@ -79,10 +81,12 @@ public:
         ret = stat(NAVI_AGL_DEFAULT_PATH_JAPAN, &sb);
         if (ret == 0) {
             g_voicelanguage = SYS_LANGUAGE_JP;
+            qDebug() << "japan_TR9 find";
 
             return ret;
         }
 
+        qDebug() << "search_map_data() failed";
         return ret;
     }
 };
