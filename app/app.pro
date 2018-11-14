@@ -14,7 +14,8 @@ CONFIG += c++11 link_pkgconfig
 HEADERS += \
     markermodel.h \
     dbus_server.h \
-    guidance_module.h
+    guidance_module.h \
+    file_operation.h
 
 SOURCES += main.cpp \
     dbus_server.cpp

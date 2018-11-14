@@ -51,6 +51,7 @@
 #include "markermodel.h"
 #include "dbus_server.h"
 #include "guidance_module.h"
+#include "file_operation.h"
 
 //#if !USE_QTAGLEXTRAS && !USE_QLIBWINDOWMANAGER
 //using namespace std;
@@ -234,6 +235,9 @@ int main(int argc, char *argv[])
 
     Guidance_Module guidance;
     engine.rootContext()->setContextProperty("guidanceModule", &guidance);
+
+    File_Operation file;
+    engine.rootContext()->setContextProperty("fileOperation", &file);
 
     engine.load(QUrl(QStringLiteral("qrc:/navigation.qml")));
     QObject *map = engine.rootObjects().first()->findChild<QObject*>("map");
