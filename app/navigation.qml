@@ -49,6 +49,7 @@ ApplicationWindow {
 		property int jitterThreshold : 30
         property variant currentpostion : QtPositioning.coordinate(car_position_lat, car_position_lon)
         property var poiArray: new Array
+        property int last_segmentcounter : -1
 
         width: parent.width
         height: parent.height
@@ -614,10 +615,15 @@ ApplicationWindow {
                             img_destination_direction.state = routeModel.get(0).segments[segmentcounter].maneuver.direction
                             icon_segment_point.coordinate = routeModel.get(0).segments[segmentcounter].path[0]
                             map.addMapItem(icon_segment_point)
+                            // console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                            // guidanceModule.guidance(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                        }
+                    }else{
+                        if(next_cross_distance <= 330 && last_segmentcounter != segmentcounter) {
+                            last_segmentcounter = segmentcounter
                             console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
                             guidanceModule.guidance(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
                         }
-                    }else{
                         // update progress_next_cross
                         progress_next_cross.setProgress(next_cross_distance)
                     }
