@@ -136,7 +136,10 @@ int main(int argc, char *argv[])
 	engine.rootContext()->setContextProperty("markerModel", &model);
 	Guidance_Module guidance;
 	engine.rootContext()->setContextProperty("guidanceModule", &guidance);
-	
+
+    File_Operation file;
+    engine.rootContext()->setContextProperty("fileOperation", &file);
+
 	engine.load(QUrl(QStringLiteral("qrc:/navigation.qml")));
  	QObject *root = engine.rootObjects().first();
 	QQuickWindow *window = qobject_cast<QQuickWindow *>(root);
