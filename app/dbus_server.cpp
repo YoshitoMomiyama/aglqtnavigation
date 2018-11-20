@@ -24,6 +24,11 @@ void DBus_Server::initDBus(){
     if (!QDBusConnection::sessionBus().registerObject(m_objName, this))
         qDebug() << m_objName << "registerObject() failed";
 
+    QDBusConnection	sessionBus = QDBusConnection::connectToBus(QDBusConnection::SessionBus, m_serverName);
+    if (!sessionBus.isConnected()) {
+        qDebug() << m_serverName << "connectToBus() failed";
+    }
+
     //for receive dbus signal
     org::agl::naviapi *mInterface;
     mInterface = new org::agl::naviapi(QString(),QString(),QDBusConnection::sessionBus(),this);
@@ -43,6 +48,11 @@ void DBus_Server::initAPIs(QObject *parent){
     if(!QObject::connect(this,SIGNAL(doRemovePOIs(QVariant)),
                          parent,SLOT(removePoiIconsSLOT(QVariant)))) {
         qDebug() << m_serverName << "cppSIGNAL:doRemovePOIs to qmlSLOT:removePoiIcons connect is failed";
+    }
+
+    if(!QObject::connect(this,SIGNAL(doGetRouteInfo()),
+                         parent,SLOT(doGetRouteInfoSlot()))) {
+        qDebug() << m_serverName << "cppSIGNAL:doGetRouteInfo to qmlSLOT:doGetRouteInfoSlot connect is failed";
     }
 
     if(!QObject::connect(parent,SIGNAL(qmlSignalRouteInfo(double,double,double,double)),
@@ -68,27 +78,46 @@ void DBus_Server::initAPIs(QObject *parent){
 
 void DBus_Server::getRouteInfoSlot(){
     qDebug() << "call getRouteInfoSlot ";
+    emit doGetRouteInfo();
     return;
 }
 
 // Signal
 void DBus_Server::sendSignalRouteInfo(double srt_lat, double srt_lon, double end_lat, double end_lon){
     qDebug() << "call sendSignalRouteInfo ";
+    QDBusMessage message = QDBusMessage::createSignal(m_objName,
+                                                     org::agl::naviapi::staticInterfaceName(),
+                                                     "signalRouteInfo");
+    message << srt_lat << srt_lon << end_lat << end_lon;
+    QDBusConnection::sessionBus().send(message);
     return;
 }
 
 void DBus_Server::sendSignalPosInfo(double lat, double lon, double drc, double dst){
-    qDebug() << "call sendSignalPosInfo ";
+//    qDebug() << "call sendSignalPosInfo ";
+    QDBusMessage message = QDBusMessage::createSignal(m_objName,
+                                                     org::agl::naviapi::staticInterfaceName(),
+                                                     "signalPosInfo");
+    message << lat << lon << drc << dst;
+    QDBusConnection::sessionBus().send(message);
     return;
 }
 
 void DBus_Server::sendSignalStopDemo(){
     qDebug() << "call sendSignalStopDemo ";
+    QDBusMessage message = QDBusMessage::createSignal(m_objName,
+                                                     org::agl::naviapi::staticInterfaceName(),
+                                                     "signalStopDemo");
+    QDBusConnection::sessionBus().send(message);
     return;
 }
 
 void DBus_Server::sendSignalArrvied(){
     qDebug() << "call sendSignalArrvied ";
+    QDBusMessage message = QDBusMessage::createSignal(m_objName,
+                                                     org::agl::naviapi::staticInterfaceName(),
+                                                     "signalArrvied");
+    QDBusConnection::sessionBus().send(message);
     return;
 }
 
