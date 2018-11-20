@@ -132,9 +132,11 @@ int main(int argc, char *argv[])
 	});
 	// Load qml
 	QQmlApplicationEngine engine;
-	MarkerModel model;
+
+    MarkerModel model;
 	engine.rootContext()->setContextProperty("markerModel", &model);
-	Guidance_Module guidance;
+
+    Guidance_Module guidance;
 	engine.rootContext()->setContextProperty("guidanceModule", &guidance);
 
     File_Operation file;
@@ -144,10 +146,9 @@ int main(int argc, char *argv[])
  	QObject *root = engine.rootObjects().first();
 	QQuickWindow *window = qobject_cast<QQuickWindow *>(root);
 	QObject::connect(window, SIGNAL(frameSwapped()), qwmHandler, SLOT(slotActivateSurface()));
-	
-	QObject *map = engine.rootObjects().first()->findChild<QObject*>("map");
-	DBus_Server dbus(pathBase,objBase,serverName,map);
-	
+    QObject *map = engine.rootObjects().first()->findChild<QObject*>("map");
+    DBus_Server dbus(pathBase,objBase,serverName,map);
+
 #else	// for only libwindowmanager
 	QGuiApplication app(argc, argv);
     app.setApplicationName("navigation");

@@ -36,6 +36,10 @@ Item {
     function discardWaypoints() {
         map.initDestination()
 
+        if(btn_guidance.sts_guide != 0){
+            map.qmlSignalStopDemo()
+        }
+
         btn_guidance.sts_guide = 0
         btn_guidance.state = "Idle"
     }

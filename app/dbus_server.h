@@ -27,8 +27,13 @@ signals:
     void doAddPOI(QVariant,QVariant,QVariant);
     void doRemovePOIs(QVariant);
 
-private slots:
+public slots:
     void addPOI(uint category_id, double poi_Lat, double poi_Lon);
     void removePOIs(uint category_id);
+    void getRouteInfoSlot();
+    void sendSignalRouteInfo(double srt_lat,double srt_lon,double end_lat,double end_lon);
+    void sendSignalPosInfo(double lat,double lon,double drc,double dst);
+    void sendSignalStopDemo();
+    void sendSignalArrvied();
 };
 #endif // DBUS_SERVER_H

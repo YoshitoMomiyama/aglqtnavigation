@@ -24,25 +24,13 @@ void DBus_Server::initDBus(){
     if (!QDBusConnection::sessionBus().registerObject(m_objName, this))
         qDebug() << m_objName << "registerObject() failed";
 
-    if (!QDBusConnection::sessionBus().connect(
-                m_pathName,
-                m_objName,
-                org::agl::naviapi::staticInterfaceName(),
-                "addPOI",
-                this,
-                SLOT(addPOI(uint , double , double )))) {	//slot
-        qDebug() << m_serverName << "sessionBus.connect():addPOI failed";
+    //for receive dbus signal
+    org::agl::naviapi *mInterface;
+    mInterface = new org::agl::naviapi(QString(),QString(),QDBusConnection::sessionBus(),this);
+    if (!connect(mInterface,SIGNAL(getRouteInfo()),this,SLOT(getRouteInfoSlot()))){
+        qDebug() << m_serverName << "sessionBus.connect():getRouteInfoSlot failed";
     }
 
-    if (!QDBusConnection::sessionBus().connect(
-                m_pathName,
-                m_objName,
-                org::agl::naviapi::staticInterfaceName(),
-                "removePOIs",
-                this,
-                SLOT(removePOIs(uint)))) {	//slot
-        qDebug() << m_serverName << "sessionBus.connect():removePOIs failed";
-    }
 }
 
 void DBus_Server::initAPIs(QObject *parent){
@@ -56,8 +44,53 @@ void DBus_Server::initAPIs(QObject *parent){
                          parent,SLOT(removePoiIconsSLOT(QVariant)))) {
         qDebug() << m_serverName << "cppSIGNAL:doRemovePOIs to qmlSLOT:removePoiIcons connect is failed";
     }
+
+    if(!QObject::connect(parent,SIGNAL(qmlSignalRouteInfo(double,double,double,double)),
+                         this,SLOT(sendSignalRouteInfo(double,double,double,double)))) {
+        qDebug() << m_serverName << "qmlSIGNAL:qmlSignalRouteInfo to cppSLOT:sendSignalRouteInfo connect is failed";
+    }
+
+    if(!QObject::connect(parent,SIGNAL(qmlSignalPosInfo(double,double,double,double)),
+                         this,SLOT(sendSignalPosInfo(double,double,double,double)))) {
+        qDebug() << m_serverName << "qmlSIGNAL:qmlSignalPosInfo to cppSLOT:sendSignalPosInfo connect is failed";
+    }
+
+    if(!QObject::connect(parent,SIGNAL(qmlSignalStopDemo()),
+                         this,SLOT(sendSignalStopDemo()))) {
+        qDebug() << m_serverName << "qmlSIGNAL:qmlSignalStopDemo to cppSLOT:sendSignalStopDemo connect is failed";
+    }
+
+    if(!QObject::connect(parent,SIGNAL(qmlSignalArrvied()),
+                         this,SLOT(sendSignalArrvied()))) {
+        qDebug() << m_serverName << "qmlSIGNAL:qmlSignalArrvied to cppSLOT:sendSignalArrvied connect is failed";
+    }
 }
+
+void DBus_Server::getRouteInfoSlot(){
+    qDebug() << "call getRouteInfoSlot ";
+    return;
+}
+
 // Signal
+void DBus_Server::sendSignalRouteInfo(double srt_lat, double srt_lon, double end_lat, double end_lon){
+    qDebug() << "call sendSignalRouteInfo ";
+    return;
+}
+
+void DBus_Server::sendSignalPosInfo(double lat, double lon, double drc, double dst){
+    qDebug() << "call sendSignalPosInfo ";
+    return;
+}
+
+void DBus_Server::sendSignalStopDemo(){
+    qDebug() << "call sendSignalStopDemo ";
+    return;
+}
+
+void DBus_Server::sendSignalArrvied(){
+    qDebug() << "call sendSignalArrvied ";
+    return;
+}
 
 // Method
 void DBus_Server::addPOI(uint category_id, double poi_Lat, double poi_Lon){
