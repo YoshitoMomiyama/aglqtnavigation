@@ -647,6 +647,17 @@ ApplicationWindow {
                 map.removeMapItem(poiArray.pop())
         }
 
+        function doGetRouteInfoSlot(){
+            if(btn_guidance.state == "Idle"){
+                map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,0);
+            }else if(btn_guidance.state == "Routing"){
+                map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,0);
+                map.qmlSignalRouteInfo(car_position_lat, car_position_lon,routeQuery.waypoints[1].latitude,routeQuery.waypoints[1].longitude);
+            }else if(btn_guidance.state == "onGuide"){
+                map.qmlSignalRouteInfo(car_position_lat, car_position_lon,routeQuery.waypoints[1].latitude,routeQuery.waypoints[1].longitude);
+            }
+        }
+
         function rotateMapSmooth(){
             var prev = root.prev_car_direction
             var now = root.car_direction

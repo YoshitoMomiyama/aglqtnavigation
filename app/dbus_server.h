@@ -26,6 +26,7 @@ private:
 signals:
     void doAddPOI(QVariant,QVariant,QVariant);
     void doRemovePOIs(QVariant);
+    void doGetRouteInfo();
 
 public slots:
     void addPOI(uint category_id, double poi_Lat, double poi_Lon);
