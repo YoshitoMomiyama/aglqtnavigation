@@ -37,7 +37,7 @@ ApplicationWindow {
     property real default_zoom_level : 18
     property real default_car_direction : 0
 
-	Map{
+    Map{
 		id: map
         property int pathcounter : 0
         property int segmentcounter : 0
@@ -49,6 +49,11 @@ ApplicationWindow {
 		property int jitterThreshold : 30
         property variant currentpostion : QtPositioning.coordinate(car_position_lat, car_position_lon)
         property var poiArray: new Array
+
+        signal qmlSignalRouteInfo(double srt_lat,double srt_lon,double end_lat,double end_lon);
+        signal qmlSignalPosInfo(double lat,double lon,double drc,double dst);
+        signal qmlSignalStopDemo();
+        signal qmlSignalArrvied();
 
         width: parent.width
         height: parent.height
@@ -298,6 +303,7 @@ ApplicationWindow {
                 }
 
                 routeModel.update()
+                map.qmlSignalRouteInfo(car_position_lat, car_position_lon,coord.latitude,coord.longitude)
 
                 // update icon_end_point
                 icon_end_point.coordinate = coord
@@ -311,6 +317,7 @@ ApplicationWindow {
 
             // reset currentpostion
             map.currentpostion = QtPositioning.coordinate(car_position_lat, car_position_lon)
+            map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,0)
 
             routeQuery.clearWaypoints();
             routeQuery.addWaypoint(map.currentpostion)
@@ -575,15 +582,19 @@ ApplicationWindow {
                 if(next_distance < 25)
                 {
                     map.currentpostion = routeModel.get(0).path[pathcounter]
+                    map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,0)
                     if(pathcounter < routeModel.get(0).path.length - 1){
                         pathcounter++
                     }
                     else
                     {
+                        // Arrive at your destination
                         btn_guidance.sts_guide = 0
+                        map.qmlSignalArrvied()
                     }
                 }else{
                     setNextCoordinate(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,20)
+                    map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,next_distance-20)
                 }
 //                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
 
