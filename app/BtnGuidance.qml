@@ -42,7 +42,7 @@ Item {
 
     Timer {
         id: positionTimer
-        interval: 250; running: false; repeat: true
+        interval: 15; running: false; repeat: true
         onTriggered: map.updatePositon()
     }
 

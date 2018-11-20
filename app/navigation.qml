@@ -584,7 +584,7 @@ ApplicationWindow {
                         btn_guidance.sts_guide = 0
                     }
                 }else{
-                    setNextCoordinate(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,20)
+                    setNextCoordinate(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,1)
                 }
 //                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
 
