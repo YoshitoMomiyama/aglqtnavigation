@@ -580,7 +580,7 @@ ApplicationWindow {
                                                             routeModel.get(0).segments[segmentcounter].path[0].longitude);
 //                console.log("next_cross_distance:",next_cross_distance);
                 // set next coordidnate
-                if(next_distance < 25)
+                if(next_distance < 2)
                 {
                     map.currentpostion = routeModel.get(0).path[pathcounter]
                     map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,0)
