@@ -613,7 +613,7 @@ ApplicationWindow {
 
                 // report a new instruction if current position matches with the head position of the segment
                 if(segmentcounter <= routeModel.get(0).segments.length - 1){
-                     if(next_cross_distance < 25){
+                     if(next_cross_distance < 2){
 //                      console.log("new segment instruction: ", routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
                         progress_next_cross.setProgress(0)
                         if(segmentcounter < routeModel.get(0).segments.length - 1){
