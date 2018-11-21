@@ -36,6 +36,7 @@ ApplicationWindow {
     property bool st_heading_up: false
     property real default_zoom_level : 18
     property real default_car_direction : 0
+    property real car_accumulated_distance : 0
 
     Map{
 		id: map
@@ -318,7 +319,8 @@ ApplicationWindow {
 
             // reset currentpostion
             map.currentpostion = QtPositioning.coordinate(car_position_lat, car_position_lon)
-            map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,0)
+            car_accumulated_distance = 0
+            map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,car_accumulated_distance)
 
             routeQuery.clearWaypoints();
             routeQuery.addWaypoint(map.currentpostion)
@@ -583,7 +585,8 @@ ApplicationWindow {
                 if(next_distance < 2)
                 {
                     map.currentpostion = routeModel.get(0).path[pathcounter]
-                    map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,0)
+                    car_accumulated_distance += next_distance
+                    map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,car_accumulated_distance)
                     if(pathcounter < routeModel.get(0).path.length - 1){
                         pathcounter++
                     }
@@ -595,7 +598,8 @@ ApplicationWindow {
                     }
                 }else{
                     setNextCoordinate(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,1)
-                    map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,next_distance-1)
+                    car_accumulated_distance += 1
+                    map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,car_accumulated_distance)
                 }
 //                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
 
@@ -648,12 +652,15 @@ ApplicationWindow {
         }
 
         function doGetRouteInfoSlot(){
-            if(btn_guidance.state == "Idle"){
-                map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,0);
-            }else if(btn_guidance.state == "Routing"){
-                map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,0);
+            if(btn_guidance.sts_guide == 0){ // idle
+                console.log("called doGetRouteInfoSlot sts_guide == idle")
+                map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,car_accumulated_distance);
+            }else if(btn_guidance.sts_guide == 1){ // Routing
+                console.log("called doGetRouteInfoSlot sts_guide == Routing")
+                map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,car_accumulated_distance);
                 map.qmlSignalRouteInfo(car_position_lat, car_position_lon,routeQuery.waypoints[1].latitude,routeQuery.waypoints[1].longitude);
-            }else if(btn_guidance.state == "onGuide"){
+            }else if(btn_guidance.sts_guide == 2){ // onGuide
+                console.log("called doGetRouteInfoSlot sts_guide == onGuide")
                 map.qmlSignalRouteInfo(car_position_lat, car_position_lon,routeQuery.waypoints[1].latitude,routeQuery.waypoints[1].longitude);
             }
         }
