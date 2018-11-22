@@ -32,11 +32,14 @@ ApplicationWindow {
     property real car_position_lat: 36.136261     // Las Vegas Convention Center
     property real car_position_lon: -115.151254
     property real car_direction: 0  //North
+    property real car_driving_speed: 60  // set Km/h
     property real prev_car_direction: 0
     property bool st_heading_up: false
     property real default_zoom_level : 18
     property real default_car_direction : 0
     property real car_accumulated_distance : 0
+    property real positionTimer_interval : 15 // set millisecond
+    property real car_moving_distance : (car_driving_speed / 3.6) / (1000/positionTimer_interval) // Metric unit
 
     Map{
 		id: map
@@ -582,10 +585,12 @@ ApplicationWindow {
                                                             routeModel.get(0).segments[segmentcounter].path[0].longitude);
 //                console.log("next_cross_distance:",next_cross_distance);
                 // set next coordidnate
-                if(next_distance < 2)
+                if(next_distance < (root.car_moving_distance * 1.5))
                 {
                     map.currentpostion = routeModel.get(0).path[pathcounter]
-                    car_accumulated_distance += next_distance
+                    if(pathcounter != 0){
+                        car_accumulated_distance += next_distance
+                    }
                     map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,car_accumulated_distance)
                     if(pathcounter < routeModel.get(0).path.length - 1){
                         pathcounter++
@@ -597,8 +602,10 @@ ApplicationWindow {
                         map.qmlSignalArrvied()
                     }
                 }else{
-                    setNextCoordinate(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,1)
-                    car_accumulated_distance += 1
+                    setNextCoordinate(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,root.car_moving_distance)
+                    if(pathcounter != 0){
+                        car_accumulated_distance += root.car_moving_distance
+                    }
                     map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,car_accumulated_distance)
                 }
 //                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
