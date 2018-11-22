@@ -137,8 +137,8 @@ ApplicationWindow {
             id: car_position_mapitem
             sourceItem: Image {
                 id: car_position_mapitem_image
-                width: 16
-                height: 16
+                width: 32
+                height: 32
                 source: "images/240px-Red_Arrow_Up.svg.png"
 
                 transform: Rotation {
