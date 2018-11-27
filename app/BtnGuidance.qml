@@ -40,6 +40,10 @@ Item {
             map.qmlSignalStopDemo()
         }
 
+        if(map.center !== map.currentpostion){
+            btn_present_position.state = "Optional"
+        }
+
         btn_guidance.sts_guide = 0
         btn_guidance.state = "Idle"
     }
