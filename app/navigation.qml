@@ -44,6 +44,8 @@ ApplicationWindow {
     Map{
 		id: map
         property int pathcounter : 0
+        property int prevpathcounter : -1
+        property real is_rotating: 0
         property int segmentcounter : 0
         property int waypoint_count: -1
 		property int lastX : -1
@@ -138,6 +140,7 @@ ApplicationWindow {
         }
         MapQuickItem {
             id: car_position_mapitem
+            property int isRotating: 0
             sourceItem: Image {
                 id: car_position_mapitem_image
                 width: 32
@@ -166,7 +169,7 @@ ApplicationWindow {
                 }
             ]
             transitions: Transition {
-                RotationAnimation { properties: "angle"; easing.type: Easing.InOutQuad }
+                RotationAnimation { properties: "angle"; easing.type: Easing.InOutQuad; duration: 800 }
             }
         }
 
@@ -221,6 +224,8 @@ ApplicationWindow {
 						break
 					case 1:
 						map.pathcounter = 0
+                        map.prevpathcounter = -1
+                        map.is_rotating = 0
 						map.segmentcounter = 0
 //						console.log("1 route found")
 //						console.log("path: ", get(0).path.length, "segment: ", get(0).segments.length)
@@ -334,6 +339,8 @@ ApplicationWindow {
             }
             waypoint_count = 0
             pathcounter = 0
+            prevpathcounter = -1
+            is_rotating = 0
             segmentcounter = 0
             routeModel.update();
             markerModel.removeMarker();
@@ -554,9 +561,11 @@ ApplicationWindow {
 		}
         gesture.onFlickStarted: {
             btn_present_position.state = "Optional"
+            car_position_mapitem.state = "NorthUp"
         }
         gesture.onPanStarted: {
             btn_present_position.state = "Optional"
+            car_position_mapitem.state = "NorthUp"
         }
 		function updatePositon()
 		{
@@ -584,31 +593,52 @@ ApplicationWindow {
                                                             routeModel.get(0).segments[segmentcounter].path[0].latitude,
                                                             routeModel.get(0).segments[segmentcounter].path[0].longitude);
 //                console.log("next_cross_distance:",next_cross_distance);
-                // set next coordidnate
-                if(next_distance < (root.car_moving_distance * 1.5))
-                {
-                    map.currentpostion = routeModel.get(0).path[pathcounter]
-                    if(pathcounter != 0){
-                        car_accumulated_distance += next_distance
-                    }
-                    map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,car_accumulated_distance)
-                    if(pathcounter < routeModel.get(0).path.length - 1){
-                        pathcounter++
-                    }
-                    else
-                    {
-                        // Arrive at your destination
-                        btn_guidance.sts_guide = 0
-                        map.qmlSignalArrvied()
-                    }
-                }else{
-                    setNextCoordinate(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,root.car_moving_distance)
-                    if(pathcounter != 0){
-                        car_accumulated_distance += root.car_moving_distance
-                    }
-                    map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,car_accumulated_distance)
+
+                // car_position_mapitem angle
+                if(prevpathcounter !== pathcounter) {
+                    root.prev_car_direction = root.car_direction
+                    root.car_direction = next_direction
                 }
-//                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
+
+                if(root.st_heading_up) {
+                    // HeadingUp
+                    is_rotating = map.bearing - root.car_direction;
+                } else {
+                    // NorthUp
+                    is_rotating = root.prev_car_direction - root.car_direction;
+                }
+
+                if(is_rotating < 0) {
+                    var val = -1;
+                    is_rotating = is_rotating * val;
+                }
+
+                if(is_rotating < 5) {
+                    // set next coordidnate
+                    if(next_distance < (root.car_moving_distance * 1.5))
+                    {
+                        map.currentpostion = routeModel.get(0).path[pathcounter]
+                        car_accumulated_distance += next_distance
+                        map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,car_accumulated_distance)
+                        if(pathcounter < routeModel.get(0).path.length - 1){
+                            prevpathcounter = pathcounter
+                            pathcounter++
+                        }
+                        else
+                        {
+                            // Arrive at your destination
+                            btn_guidance.sts_guide = 0
+                            map.qmlSignalArrvied()
+                        }
+                    }else{
+                        setNextCoordinate(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,root.car_moving_distance)
+                        if(pathcounter != 0){
+                            car_accumulated_distance += root.car_moving_distance
+                        }
+                        map.qmlSignalPosInfo(map.currentpostion.latitude, map.currentpostion.longitude,next_direction,car_accumulated_distance)
+                    }
+    //                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
+                }
 
                 // car_position_mapitem angle
                 root.prev_car_direction = root.car_direction
@@ -618,40 +648,46 @@ ApplicationWindow {
                 {
                     // update map.center
                     map.center = map.currentpostion
-
                     rotateMapSmooth()
                 }
+                else
+                {
+                    stopMapRotation()
+                }
 
-                // report a new instruction if current position matches with the head position of the segment
-                if(segmentcounter <= routeModel.get(0).segments.length - 1){
-                     if(next_cross_distance < 2){
-//                      console.log("new segment instruction: ", routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
-                        progress_next_cross.setProgress(0)
-                        if(segmentcounter < routeModel.get(0).segments.length - 1){
-                            segmentcounter++
-                        }
-                        if(segmentcounter === routeModel.get(0).segments.length - 1){
-                            img_destination_direction.state = "12"
-                            map.removeMapItem(icon_segment_point)
+                if(is_rotating < 5) {
+                    // report a new instruction if current position matches with the head position of the segment
+                    if(segmentcounter <= routeModel.get(0).segments.length - 1){
+                         if(next_cross_distance < 2){
+    //                      console.log("new segment instruction: ", routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                            progress_next_cross.setProgress(0)
+                            if(segmentcounter < routeModel.get(0).segments.length - 1){
+                                segmentcounter++
+                            }
+                            if(segmentcounter === routeModel.get(0).segments.length - 1){
+                                img_destination_direction.state = "12"
+                                map.removeMapItem(icon_segment_point)
+                            }else{
+                                img_destination_direction.state = routeModel.get(0).segments[segmentcounter].maneuver.direction
+                                icon_segment_point.coordinate = routeModel.get(0).segments[segmentcounter].path[0]
+                                map.addMapItem(icon_segment_point)
+                                // console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                                // guidanceModule.guidance(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                            }
                         }else{
-                            img_destination_direction.state = routeModel.get(0).segments[segmentcounter].maneuver.direction
-                            icon_segment_point.coordinate = routeModel.get(0).segments[segmentcounter].path[0]
-                            map.addMapItem(icon_segment_point)
-                            // console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
-                            // guidanceModule.guidance(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                            if(next_cross_distance <= 330 && last_segmentcounter != segmentcounter) {
+                                last_segmentcounter = segmentcounter
+                                console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                                guidanceModule.guidance(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                            }
+                            // update progress_next_cross
+                            progress_next_cross.setProgress(next_cross_distance)
                         }
-                    }else{
-                        if(next_cross_distance <= 330 && last_segmentcounter != segmentcounter) {
-                            last_segmentcounter = segmentcounter
-                            console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
-                            guidanceModule.guidance(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
-                        }
-                        // update progress_next_cross
-                        progress_next_cross.setProgress(next_cross_distance)
                     }
                 }
             }
 		}
+
         function removePoiIconsSLOT(category_id){
             console.log("called removePoiIcons")
             while(poiArray.length>0)
@@ -673,48 +709,17 @@ ApplicationWindow {
         }
 
         function rotateMapSmooth(){
-            var prev = root.prev_car_direction
-            var now = root.car_direction
-            var diff
-
             if(root.st_heading_up){
-
-                diff = now - prev
-
-                if ( 180 < diff ){
-                    diff = diff - 360.0
-                } else if ( diff < -180 ){
-                    diff = diff + 360.0
-                }
-
-                //console.log("prev:", prev, ", now:", now, ", diff:", diff)
-
-                if( 0 < diff ){
-                    rot_anim.direction = RotationAnimation.Clockwise
-                } else {
-                    rot_anim.direction = RotationAnimation.Counterclockwise
-                }
-
                 map.state = "none"
                 map.state = "smooth_rotate"
             }else{
-                diff = 0 - prev
-
-                if ( 180 < diff ){
-                    diff = diff - 360.0
-                } else if ( diff < -180 ){
-                    diff = diff + 360.0
-                }
-
-                //console.log("prev:", prev, ", now:", now, ", diff:", diff)
-                if( 0 < diff ){
-                    rot_anim.direction = RotationAnimation.Clockwise
-                } else {
-                    rot_anim.direction = RotationAnimation.Counterclockwise
-                }
-
                 map.state = "smooth_rotate_north"
             }
+        }
+
+        function stopMapRotation(){
+            map.state = "none"
+            rot_anim.stop()
         }
 
         states: [
@@ -736,8 +741,9 @@ ApplicationWindow {
             RotationAnimation {
                 id: rot_anim
                 property: "bearing"
+                direction: RotationAnimation.Shortest
                 easing.type: Easing.InOutQuad
-                duration: 200
+                duration: 800
             }
         }
     }
