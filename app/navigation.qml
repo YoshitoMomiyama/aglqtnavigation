@@ -561,11 +561,9 @@ ApplicationWindow {
 		}
         gesture.onFlickStarted: {
             btn_present_position.state = "Optional"
-            car_position_mapitem.state = "NorthUp"
         }
         gesture.onPanStarted: {
             btn_present_position.state = "Optional"
-            car_position_mapitem.state = "NorthUp"
         }
 		function updatePositon()
 		{
@@ -613,7 +611,7 @@ ApplicationWindow {
                     is_rotating = is_rotating * val;
                 }
 
-                if(is_rotating < 5) {
+                if(is_rotating < 30) {
                     // set next coordidnate
                     if(next_distance < (root.car_moving_distance * 1.5))
                     {
@@ -640,22 +638,14 @@ ApplicationWindow {
     //                console.log("NextCoordinate:",map.currentpostion.latitude,",",map.currentpostion.longitude)
                 }
 
-                // car_position_mapitem angle
-                root.prev_car_direction = root.car_direction
-                root.car_direction = next_direction
-
                 if(btn_present_position.state === "Flowing")
                 {
                     // update map.center
                     map.center = map.currentpostion
-                    rotateMapSmooth()
                 }
-                else
-                {
-                    stopMapRotation()
-                }
+                rotateMapSmooth()
 
-                if(is_rotating < 5) {
+                if(is_rotating < 30) {
                     // report a new instruction if current position matches with the head position of the segment
                     if(segmentcounter <= routeModel.get(0).segments.length - 1){
                          if(next_cross_distance < 2){
@@ -743,7 +733,7 @@ ApplicationWindow {
                 property: "bearing"
                 direction: RotationAnimation.Shortest
                 easing.type: Easing.InOutQuad
-                duration: 800
+                duration: 200
             }
         }
     }
