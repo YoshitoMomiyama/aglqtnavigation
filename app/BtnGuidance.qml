@@ -50,7 +50,9 @@ Item {
 
     Timer {
         id: positionTimer
-        interval: 15; running: false; repeat: true
+        interval: fileOperation.getUpdateInterval();
+        running: false;
+        repeat: true
         onTriggered: map.updatePositon()
     }
 

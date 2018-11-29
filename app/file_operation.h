@@ -2,6 +2,9 @@
 #define FILE_OPERATION_H
 #include <QObject>
 #include <QString>
+#include <QFile>
+#include <QJsonObject>
+#include <QJsonDocument>
 
 /******************************************************
  * Write access token of mapbox in /etc/mapAccessToken
@@ -11,30 +14,25 @@
 class File_Operation: public QObject{
 
     Q_OBJECT
+
+    QString m_mapAccessToken;
+    double m_car_speed;         // set Km/h
+    int m_update_interval;      // set millisecond
+    double m_start_latitude;
+    double m_start_longitute;
+
 public:
-    Q_INVOKABLE QString getMapAccessToken() {
-        char buf[512];
-        QString mapAccessToken = "";
+    File_Operation();
+    ~File_Operation();
 
-        FILE* filep = fopen(qPrintable(MAP_ACCESS_TOKEN_FILEPATH), "r");
-        if (!filep) {
-            fprintf(stderr,"Failed to open mapAccessToken file \"%s\": %m", qPrintable(MAP_ACCESS_TOKEN_FILEPATH));
-            return mapAccessToken;
-        }
-        if (!fgets(buf, 512, filep)) {
-            fprintf(stderr,"Failed to read mapAccessToken from mapAccessToken file \"%s\"", qPrintable(MAP_ACCESS_TOKEN_FILEPATH));
-            fclose(filep);
-            return mapAccessToken;
-        }
-        if (strlen(buf) > 0 && buf[strlen(buf)-1] == '\n') {
-            buf[strlen(buf)-1] = '\0';
-        }
-        mapAccessToken = QString(buf);
+    Q_INVOKABLE QString getMapAccessToken();
+    Q_INVOKABLE double getCarSpeed();
+    Q_INVOKABLE int getUpdateInterval();
+    Q_INVOKABLE double getStartLatitude();
+    Q_INVOKABLE double getStartLongitute();
 
-        fclose(filep);
-
-        return mapAccessToken;
-    }
+private:
+    void initFileOperation();
 };
 
 #endif // FILE_OPERATION_H
