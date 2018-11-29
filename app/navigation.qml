@@ -169,7 +169,12 @@ ApplicationWindow {
                 }
             ]
             transitions: Transition {
-                RotationAnimation { properties: "angle"; easing.type: Easing.InOutQuad; duration: 800 }
+                RotationAnimation {
+                    properties: "angle";
+                    easing.type: Easing.InOutQuad;
+                    direction: RotationAnimation.Shortest;
+                    duration: 200
+                }
             }
         }
 
