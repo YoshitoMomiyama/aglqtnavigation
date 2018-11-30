@@ -9,7 +9,7 @@
 /******************************************************
  * Write access token of mapbox in /etc/mapAccessToken
  ******************************************************/
-#define MAP_ACCESS_TOKEN_FILEPATH "/etc/mapAccessToken"
+#define MAP_ACCESS_TOKEN_FILEPATH "/etc/naviconfig.ini"
 
 class File_Operation: public QObject{
 
