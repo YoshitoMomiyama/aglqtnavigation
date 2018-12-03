@@ -244,9 +244,9 @@ ApplicationWindow {
 //						}
                         console.log("1st instruction: ", get(0).segments[map.segmentcounter].maneuver.instructionText)
                         for( var i = 0; i < routeModel.get(0).segments.length; i++){
-//                            console.log("segments[",i,"].maneuver.direction:" ,routeModel.get(0).segments[i].maneuver.direction)
-//                            console.log("segments[",i,"].maneuver.instructionText:" ,routeModel.get(0).segments[i].maneuver.instructionText)
-//                            console.log("segments[",i,"].maneuver.path[0]:" ,routeModel.get(0).segments[i].path[0].latitude,",",routeModel.get(0).segments[i].path[0].longitude)
+                            console.log("segments[",i,"].maneuver.direction:" ,routeModel.get(0).segments[i].maneuver.direction)
+                            console.log("segments[",i,"].maneuver.instructionText:" ,routeModel.get(0).segments[i].maneuver.instructionText)
+                            console.log("segments[",i,"].maneuver.path[0]:" ,routeModel.get(0).segments[i].path[0].latitude,",",routeModel.get(0).segments[i].path[0].longitude)
 //                            markerModel.addMarker(routeModel.get(0).segments[i].path[0]) // for debug
                         }
                         break
@@ -266,7 +266,7 @@ ApplicationWindow {
 				line.color: "#4658da"
 				line.width: 10
 				smooth: true
-				opacity: 0.8
+                opacity: 0.8
 			}
 		}
 		
@@ -559,7 +559,7 @@ ApplicationWindow {
 			}
 			
 			onPressAndHold:{
-                if(btn_guidance.state !== "onGuide")
+                if((btn_guidance.state !== "onGuide") && (btn_guidance.state !== "Routing"))
                 {
                     if (Math.abs(map.pressX - mouse.x ) < map.jitterThreshold
                             && Math.abs(map.pressY - mouse.y ) < map.jitterThreshold) {
@@ -659,7 +659,7 @@ ApplicationWindow {
                     // report a new instruction if current position matches with the head position of the segment
                     if(segmentcounter <= routeModel.get(0).segments.length - 1){
                          if(next_cross_distance < 2){
-    //                      console.log("new segment instruction: ", routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                            console.log("new segment instruction: ", routeModel.get(0).segments[segmentcounter].maneuver.instructionText) // for segment debug
                             progress_next_cross.setProgress(0)
                             if(segmentcounter < routeModel.get(0).segments.length - 1){
                                 segmentcounter++
@@ -671,13 +671,13 @@ ApplicationWindow {
                                 img_destination_direction.state = routeModel.get(0).segments[segmentcounter].maneuver.direction
                                 icon_segment_point.coordinate = routeModel.get(0).segments[segmentcounter].path[0]
                                 map.addMapItem(icon_segment_point)
-                                // console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+                                // console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText) // for guidanceModule debug
                                 // guidanceModule.guidance(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
                             }
                         }else{
                             if(next_cross_distance <= 330 && last_segmentcounter != segmentcounter) {
                                 last_segmentcounter = segmentcounter
-                                console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
+//                                console.log(routeModel.get(0).segments[segmentcounter].maneuver.instructionText) // for guidanceModule debug
                                 guidanceModule.guidance(routeModel.get(0).segments[segmentcounter].maneuver.instructionText)
                             }
                             // update progress_next_cross
