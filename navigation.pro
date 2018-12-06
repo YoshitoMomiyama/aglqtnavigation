@@ -1,8 +1,11 @@
+CONFIG += ordered
 TEMPLATE = subdirs
-SUBDIRS = app
+SUBDIRS = dbus_interface \
+          app
 
 equals(DEFINES, "AGL"){
     SUBDIRS += package
 }
 
-package.depends += app
+package.depends += dbus_interface \
+                   app

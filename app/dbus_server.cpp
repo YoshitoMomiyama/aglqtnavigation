@@ -1,18 +1,19 @@
 #include"dbus_server.h"
 #include <QDebug>
 
-DBus_Server::DBus_Server(const QString &pathName,
-                         const QString &objName,
-                         const QString &serverName,
-                         QObject *parent) :
-  m_serverName(serverName),
-  m_pathName(pathName + serverName),
-  m_objName(objName + serverName)
+DBus_Server::DBus_Server(QObject *parent) :
+  m_serverName("naviapi"),
+  m_pathName("org.agl.naviapi"),
+  m_objName("/org/agl/naviapi")
 {
     initDBus();
     initAPIs(parent);
 }
-DBus_Server::~DBus_Server(){}
+
+DBus_Server::~DBus_Server(){
+    QDBusConnection::sessionBus().unregisterObject(m_objName);
+    QDBusConnection::sessionBus().unregisterService(m_pathName);
+}
 
 void DBus_Server::initDBus(){
 

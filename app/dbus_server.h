@@ -1,7 +1,7 @@
 #ifndef DBUS_SERVER_H
 #define DBUS_SERVER_H
-#include "naviapi_interface.h"
-#include "naviapi_adaptor.h"
+#include "org.agl.naviapi_interface.h"
+#include "org.agl.naviapi_adaptor.h"
 #include <QtQml/QQmlApplicationEngine>
 
 class DBus_Server : public QObject{
@@ -13,10 +13,7 @@ class DBus_Server : public QObject{
     QString m_objName;
 
 public:
-    DBus_Server(const QString &pathName,
-                const QString &objName,
-                const QString &serverName,
-                QObject *parent = nullptr);
+    DBus_Server(QObject *parent = nullptr);
     ~DBus_Server();
 
 private:

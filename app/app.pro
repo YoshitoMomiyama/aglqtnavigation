@@ -15,18 +15,23 @@ HEADERS += \
     markermodel.h \
     dbus_server.h \
     guidance_module.h \
-    file_operation.h
+    file_operation.h \
+    dbus_server_mapmatchedposition.h
 
 SOURCES += main.cpp \
     dbus_server.cpp \
-    file_operation.cpp
+    file_operation.cpp \
+    dbus_server_mapmatchedposition.cpp
 
 RESOURCES += \
     navigation.qrc \
     images/images.qrc
 
-DBUS_ADAPTORS += dbusinterface/org.agl.naviapi.xml
-DBUS_INTERFACES += dbusinterface/org.agl.naviapi.xml
+LIBS += $$OUT_PWD/../dbus_interface/libdbus_interface.a
+INCLUDEPATH += $$OUT_PWD/../dbus_interface
 
 include(app.pri)
+
+DISTFILES +=
+
 
