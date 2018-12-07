@@ -9,7 +9,7 @@
 #include <QPair>
 #include <QDBusVariant>
 
-// for org.genivi.navigationcore.MapMatchedPosition
+// for org.genivi.navigationcore
 struct qPositionPairElm{
     uint8_t key;
     QDBusVariant value;
@@ -38,5 +38,38 @@ Q_DECLARE_METATYPE(qPosition)
 
 typedef QList<int32_t> qValuesToReturn;
 Q_DECLARE_METATYPE(qValuesToReturn)
+
+typedef QList<QMap<int32_t,qPositionPairElm>> qWaypointsList; // aa{i(yv)}
+Q_DECLARE_METATYPE(qWaypointsList)
+
+typedef QList<uint32_t> qCalculatedRoutesList; // au
+
+typedef QList<uint32_t> qRoutesList; //au
+
+struct qSessionsListElm{
+    uint32_t key;
+    QString value;
+};
+Q_DECLARE_METATYPE(qSessionsListElm)
+
+inline QDBusArgument &operator <<(QDBusArgument &argument, const qSessionsListElm &qsessionslistelm)
+{
+    argument.beginStructure();
+    argument << qsessionslistelm.key << qsessionslistelm.value;
+    argument.endStructure();
+    return argument;
+}
+
+inline const QDBusArgument &operator >>(const QDBusArgument &argument, qSessionsListElm &qsessionslistelm)
+{
+    argument.beginStructure();
+    argument >> qsessionslistelm.key;
+    argument >> qsessionslistelm.value;
+    argument.endStructure();
+    return argument;
+}
+
+typedef QList<qSessionsListElm> qSessionsList; // a(us)
+Q_DECLARE_METATYPE(qSessionsList)
 
 #endif

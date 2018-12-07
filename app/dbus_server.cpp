@@ -20,10 +20,10 @@ void DBus_Server::initDBus(){
     new NaviapiAdaptor(this);
 
     if (!QDBusConnection::sessionBus().registerService(m_pathName))
-        qDebug() << m_pathName << "registerService() failed";
+        qDebug() << m_serverName << "registerService() failed";
 
     if (!QDBusConnection::sessionBus().registerObject(m_objName, this))
-        qDebug() << m_objName << "registerObject() failed";
+        qDebug() << m_serverName << "registerObject() failed";
 
     QDBusConnection	sessionBus = QDBusConnection::connectToBus(QDBusConnection::SessionBus, m_serverName);
     if (!sessionBus.isConnected()) {

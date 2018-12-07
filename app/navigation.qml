@@ -212,6 +212,7 @@ ApplicationWindow {
 
 		RouteModel {
 			id: routeModel
+            objectName: "routeModel"
             plugin : Plugin {
                 name: "mapbox"
                 PluginParameter { name: "mapbox.access_token";
@@ -327,7 +328,8 @@ ApplicationWindow {
             }
         }
 
-        function initDestination(){
+        function initDestination(startFromCurrentPosition){
+            if (startFromCurrentPosition === undefined) startFromCurrentPosition = false
             routeModel.reset();
             console.log("initWaypoint")
 
@@ -738,6 +740,28 @@ ApplicationWindow {
         function stopMapRotation(){
             map.state = "none"
             rot_anim.stop()
+        }
+
+        function doPauseSimulationSlot(){
+            btn_guidance.discardWaypoints();
+        }
+
+        function doGetAllRoutesSlot(){
+            return routeModel.count;
+        }
+
+        function doSetWaypointsSlot(latitude,longitue,startFromCurrentPosition){
+
+            if(btn_guidance.state !== "idle")
+                btn_guidance.discardWaypoints(startFromCurrentPosition);
+
+            if(btn_present_position.state === "Optional"){
+                map.center = map.currentpostion
+                btn_present_position.state = "Flowing"
+            }
+
+            if((btn_guidance.state !== "onGuide") && (btn_guidance.state !== "Routing"))
+                map.addDestination(QtPositioning.coordinate(latitude,longitue))
         }
 
         states: [

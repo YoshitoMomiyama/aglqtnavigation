@@ -8,8 +8,8 @@ HEADERS += \
     dbus_types.h
 
 XMLSOURCES = \
-    org.genivi.navigationcore.mapmatchedposition.xml \
-	org.agl.naviapi.xml
+    org.genivi.navigationcore.xml \
+    org.agl.naviapi.xml
 
 gen_adaptor_cpp.input = XMLSOURCES
 gen_adaptor_cpp.commands = \

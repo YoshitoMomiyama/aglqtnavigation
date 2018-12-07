@@ -43,7 +43,7 @@
 #include <QtDBus/QDBusConnection>
 #include "markermodel.h"
 #include "dbus_server.h"
-#include "dbus_server_mapmatchedposition.h"
+#include "dbus_server_navigationcore.h"
 #include "guidance_module.h"
 #include "file_operation.h"
 
@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
 	QObject::connect(window, SIGNAL(frameSwapped()), qwmHandler, SLOT(slotActivateSurface()));
     QObject *map = engine.rootObjects().first()->findChild<QObject*>("map");
     DBus_Server dbus(map);
-    dbus_server_mapmatchedposition dbus_mapmatchedposition(map);
+    dbus_server_navigationcore dbus_navigationcore(map);
 
 #else	// for only libwindowmanager
 	QGuiApplication app(argc, argv);
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/navigation.qml")));
     QObject *map = engine.rootObjects().first()->findChild<QObject*>("map");
     DBus_Server dbus(map);
-    dbus_server_mapmatchedposition dbus_mapmatchedposition(map);
+    dbus_server_navigationcore dbus_navigationcore(map);
 
 #endif
 	

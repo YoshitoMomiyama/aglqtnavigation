@@ -16,12 +16,12 @@ HEADERS += \
     dbus_server.h \
     guidance_module.h \
     file_operation.h \
-    dbus_server_mapmatchedposition.h
+    dbus_server_navigationcore.h
 
 SOURCES += main.cpp \
     dbus_server.cpp \
     file_operation.cpp \
-    dbus_server_mapmatchedposition.cpp
+    dbus_server_navigationcore.cpp
 
 RESOURCES += \
     navigation.qrc \

@@ -33,8 +33,9 @@ Item {
         btn_guidance.state = "onGuide"
     }
 
-    function discardWaypoints() {
-        map.initDestination()
+    function discardWaypoints(startFromCurrentPosition) {
+        if (startFromCurrentPosition === undefined) startFromCurrentPosition = false
+        map.initDestination(startFromCurrentPosition)
 
         if(btn_guidance.sts_guide != 0){
             map.qmlSignalStopDemo()
