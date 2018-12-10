@@ -41,16 +41,6 @@ void DBus_Server::initDBus(){
 
 void DBus_Server::initAPIs(QObject *parent){
 
-    if(!QObject::connect(this,SIGNAL(doAddPOI(QVariant,QVariant,QVariant)),
-                        parent,SLOT(addPoiIconSLOT(QVariant,QVariant,QVariant)))) {
-        qDebug() << m_serverName << "cppSIGNAL:doAddPOI to qmlSLOT:addPoiIcon connect is failed";
-    }
-
-    if(!QObject::connect(this,SIGNAL(doRemovePOIs(QVariant)),
-                         parent,SLOT(removePoiIconsSLOT(QVariant)))) {
-        qDebug() << m_serverName << "cppSIGNAL:doRemovePOIs to qmlSLOT:removePoiIcons connect is failed";
-    }
-
     if(!QObject::connect(this,SIGNAL(doGetRouteInfo()),
                          parent,SLOT(doGetRouteInfoSlot()))) {
         qDebug() << m_serverName << "cppSIGNAL:doGetRouteInfo to qmlSLOT:doGetRouteInfoSlot connect is failed";
@@ -123,13 +113,3 @@ void DBus_Server::sendSignalArrvied(){
 }
 
 // Method
-void DBus_Server::addPOI(uint category_id, double poi_Lat, double poi_Lon){
-    qDebug() << "call addPOI category_id: " << category_id << " poi_Lat: " << poi_Lat << " poi_Lon: " << poi_Lon;
-    emit doAddPOI(poi_Lat,poi_Lon,category_id);
-    return;
-}
-void DBus_Server::removePOIs(uint category_id){
-    qDebug() << "call removePOIs category_id: " << category_id;
-    emit doRemovePOIs(category_id);
-    return;
-}

@@ -1,5 +1,5 @@
-#ifndef DBUS_SERVER_MAPMATCHEDPOSITION_H
-#define DBUS_SERVER_MAPMATCHEDPOSITION_H
+#ifndef DBUS_SERVER_NAVIGATIONCORE_H
+#define DBUS_SERVER_NAVIGATIONCORE_H
 
 #include <QtDBus/QDBusConnection>
 #include <QtCore/QObject>
@@ -44,5 +44,5 @@ private:
 
 };
 
-#endif // DBUS_RECEIVER_H
+#endif // DBUS_SERVER_NAVIGATIONCORE_H
 

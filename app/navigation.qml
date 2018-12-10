@@ -50,7 +50,6 @@ ApplicationWindow {
 		property int pressY : -1
 		property int jitterThreshold : 30
         property variant currentpostion : QtPositioning.coordinate(car_position_lat, car_position_lon)
-        property var poiArray: new Array
         property int last_segmentcounter : -1
 
         signal qmlSignalRouteInfo(double srt_lat,double srt_lon,double end_lat,double end_lon);
@@ -182,7 +181,7 @@ ApplicationWindow {
                 id: icon_start_point_image
                 width: 32
                 height: 32
-                source: "images/240px-HEB_project_flow_icon_04_checkered_flag.svg.png"
+                source: "images/HEB_project_flow_icon_04_checkered_flag.svg"
             }
         }
 
@@ -315,8 +314,6 @@ ApplicationWindow {
                 var waypointlist = routeQuery.waypoints
                 for(var i=1; i<waypoint_count; i++) {
                     markerModel.addMarker(waypointlist[i])
-
-//                    map.addPoiIconSLOT(waypointlist[i].latitude,waypointlist[i].longitude,i % 5) // for Debug
                 }
 
                 routeModel.update()
@@ -356,10 +353,6 @@ ApplicationWindow {
             map.removeMapItem(icon_start_point)
             map.removeMapItem(icon_end_point)
             map.removeMapItem(icon_segment_point)
-
-            // for Debug
-//            while(poiArray.length>0)
-//                map.removeMapItem(poiArray.pop())
 
             // update car_position_mapitem angle
             root.car_direction = root.default_car_direction
@@ -425,112 +418,6 @@ ApplicationWindow {
             var lon_per_meter = (Math.cos( (curlat+addlat) / 180 * Math.PI) * 2 * Math.PI * 6378137) / 360;
             var addlon = lon_distance / lon_per_meter
             map.currentpostion = QtPositioning.coordinate(curlat+addlat, curlon+addlon);
-        }
-
-        function addPoiIconSLOT(lat,lon,type) {
-            console.log("called addPoiIcon")
-            var poiItem;
-            switch(type){
-                case 0:
-                    poiItem = Qt.createQmlObject("
-                            import QtQuick 2.0;
-                            import QtLocation 5.9;
-                            MapQuickItem {
-                                id: poi_icon;
-                                anchorPoint.x: icon_flag_liteblue_image.width/2;
-                                anchorPoint.y: icon_flag_liteblue_image.height;
-                                sourceItem: Image {
-                                    id: icon_flag_liteblue_image;
-                                    width: 32;
-                                    height: 37;
-                                    source: \"images/Flag-export_lightblue.png\";
-                                }
-                            }
-                        ",map,"dynamic");
-                    break;
-                case 1:
-                    poiItem = Qt.createQmlObject("
-                            import QtQuick 2.0;
-                            import QtLocation 5.9;
-                            MapQuickItem {
-                                id: poi_icon;
-                                anchorPoint.x: icon_building_image.width/2;
-                                anchorPoint.y: icon_building_image.height;
-                                sourceItem: Image {
-                                    id: icon_building_image;
-                                    width: 32;
-                                    height: 37;
-                                    source: \"images/BuildingIcon.png\";
-                                }
-                            }
-                        ",map,"dynamic");
-                    break;
-                case 2:
-                    poiItem = Qt.createQmlObject("
-                            import QtQuick 2.0;
-                            import QtLocation 5.9;
-                            MapQuickItem {
-                                id: poi_icon;
-                                anchorPoint.x: icon_church_image.width/2;
-                                anchorPoint.y: icon_church_image.height;
-                                sourceItem: Image {
-                                    id: icon_church_image;
-                                    width: 32;
-                                    height: 37;
-                                    source: \"images/ChurchIcon.png\";
-                                }
-                            }
-                        ",map,"dynamic");
-                    break;
-                case 3:
-                    poiItem = Qt.createQmlObject("
-                            import QtQuick 2.0;
-                            import QtLocation 5.9;
-                            MapQuickItem {
-                                id: poi_icon;
-                                anchorPoint.x: icon_restaurant_image.width/2;
-                                anchorPoint.y: icon_restaurant_image.height;
-                                sourceItem: Image {
-                                    id: icon_restaurant_image;
-                                    width: 32;
-                                    height: 37;
-                                    source: \"images/RestaurantMapIcon.png\";
-                                }
-                            }
-                        ",map,"dynamic");
-                    break;
-                case 4:
-                    poiItem = Qt.createQmlObject("
-                            import QtQuick 2.0;
-                            import QtLocation 5.9;
-                            MapQuickItem {
-                                id: poi_icon;
-                                anchorPoint.x: icon_supermarket_image.width/2;
-                                anchorPoint.y: icon_supermarket_image.height;
-                                sourceItem: Image {
-                                    id: icon_supermarket_image;
-                                    width: 32;
-                                    height: 37;
-                                    source: \"images/SupermarketMapIcon.png\";
-                                }
-                            }
-                        ",map,"dynamic");
-                    break;
-                default:
-                    poiItem = null;
-                    break;
-            }
-
-            if(poiItem === null) {
-               console.log("error creating object" +  poiItem.errorString());
-               return false;
-            }
-
-            poiItem.coordinate = QtPositioning.coordinate(lat, lon);
-            map.addMapItem(poiItem);
-            poiArray.push(poiItem);
-//            console.log("success creating object");
-            return true;
         }
 
 		MouseArea {
@@ -707,12 +594,6 @@ ApplicationWindow {
                 }
             }
 		}
-
-        function removePoiIconsSLOT(category_id){
-            console.log("called removePoiIcons")
-            while(poiArray.length>0)
-                map.removeMapItem(poiArray.pop())
-        }
 
         function doGetRouteInfoSlot(){
             if(btn_guidance.sts_guide == 0){ // idle

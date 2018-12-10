@@ -1,14 +1,6 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
         <interface name="org.agl.naviapi">
-		<method name="addPOI">
-                    <arg direction="in" name="category_id" type="u"/>
-                    <arg direction="in" name="poi_Lat" type="d"/>
-                    <arg direction="in" name="poi_Lon" type="d"/>
-		</method>
-		<method name="removePOIs">
-                    <arg direction="in" name="category_id" type="u"/>
-		</method>
                 <!-- void signalRouteInfo() -->
                 <signal name="signalRouteInfo">
                     <arg name="start_latitude"  type="d" direction="out"/>

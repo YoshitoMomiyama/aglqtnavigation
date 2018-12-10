@@ -91,7 +91,7 @@ Item {
 			height: 92
 			anchors.verticalCenter: parent.verticalCenter
 			anchors.horizontalCenter: parent.horizontalCenter
-            source: "images/124px-Pictograms-nps-land-driving_tour-2.svg.png"
+            source: "images/MUTCD_RS-113.svg"
 		}
 
 	}
