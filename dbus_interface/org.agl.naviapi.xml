@@ -24,5 +24,11 @@
                 <!-- void getRouteInfo() -->
                 <signal name="getRouteInfo">
                 </signal>
+                <!-- void checkdirection() -->
+                <signal name="checkdirection">
+                    <arg name="cur_direction"  type="d" direction="out"/>
+                    <arg name="next_direction" type="d" direction="out"/>
+                    <arg name="is_rotating" type="d" direction="out"/>
+                </signal>
         </interface>
 </node>

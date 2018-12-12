@@ -20,6 +20,7 @@ class File_Operation: public QObject{
     int m_update_interval;      // set millisecond
     double m_start_latitude;
     double m_start_longitute;
+    QString m_mapStyleUrls;
 
 public:
     File_Operation();
@@ -30,6 +31,7 @@ public:
     Q_INVOKABLE int getUpdateInterval();
     Q_INVOKABLE double getStartLatitude();
     Q_INVOKABLE double getStartLongitute();
+    Q_INVOKABLE QString getMapStyleUrls();
 
 private:
     void initFileOperation();

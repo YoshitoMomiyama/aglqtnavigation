@@ -56,6 +56,7 @@ ApplicationWindow {
         signal qmlSignalPosInfo(double lat,double lon,double drc,double dst);
         signal qmlSignalStopDemo();
         signal qmlSignalArrvied();
+        signal qmlCheckDirection(double cur_dir,double next_dir,double is_rot);
 
         width: parent.width
         height: parent.height
@@ -63,6 +64,8 @@ ApplicationWindow {
             name: "mapboxgl"
             PluginParameter { name: "mapboxgl.access_token";
             value: fileOperation.getMapAccessToken() }
+            PluginParameter { name: "mapboxgl.mapping.additional_style_urls";
+            value: fileOperation.getMapStyleUrls() }
         }
         center: QtPositioning.coordinate(car_position_lat, car_position_lon)
         zoomLevel: default_zoom_level
@@ -491,51 +494,56 @@ ApplicationWindow {
                         is_rotating = Math.floor(next_direction - cur_direction);
                     }
 
+                    if(is_rotating > 180){
+                        is_rotating = 360 - is_rotating;
+                    }
+
 //                    if(is_rotating > 0){ // for map rotateAnimation cntrol debug
 //                        console.log("is_rotating:",is_rotating);
 //                        console.log("map.bearing:",map.bearing);
 //                        console.log("next_direction:",next_direction);
 //                    }
+                    map.qmlCheckDirection(cur_direction,next_direction,is_rotating);
 
                     // rotation angle case
                     if(is_rotating > 180){
                         // driving stop hard turn
                         console.log("driving stop hard turn");
-                        root.car_moving_distance = 0
-                        rot_anim.duration = 1600
-                        rot_anim.easing.type = Easing.OutQuint
+                        root.car_moving_distance = 0;
+                        rot_anim.duration = 1600;
+                        rot_anim.easing.type = Easing.OutQuint;
                     } else if(is_rotating > 90){
                         // driving stop normal turn
                         console.log("driving stop normal turn");
-                        root.car_moving_distance = 0
-                        rot_anim.duration = 800
-                        rot_anim.easing.type = Easing.OutQuart
+                        root.car_moving_distance = 0;
+                        rot_anim.duration = 800;
+                        rot_anim.easing.type = Easing.OutQuart;
                     } else if(is_rotating > 60){
                         // driving slow speed normal turn
                         console.log("driving slow speed normal turn");
-                        root.car_moving_distance = ((car_driving_speed / 3.6) / (1000/positionTimer_interval)) * 0.3
-                        rot_anim.duration = 400
-                        rot_anim.easing.type = Easing.OutCubic
+                        root.car_moving_distance = ((car_driving_speed / 3.6) / (1000/positionTimer_interval)) * 0.3;
+                        rot_anim.duration = 400;
+                        rot_anim.easing.type = Easing.OutCubic;
                     } else if(is_rotating > 30){
                         // driving half speed soft turn
                         console.log("driving half speed soft turn");
-                        root.car_moving_distance = ((car_driving_speed / 3.6) / (1000/positionTimer_interval)) * 0.5
-                        rot_anim.duration = 300
-                        rot_anim.easing.type = Easing.OutQuad
+                        root.car_moving_distance = ((car_driving_speed / 3.6) / (1000/positionTimer_interval)) * 0.5;
+                        rot_anim.duration = 300;
+                        rot_anim.easing.type = Easing.OutQuad;
                     } else {
                         // driving nomal speed soft turn
-                        root.car_moving_distance = (car_driving_speed / 3.6) / (1000/positionTimer_interval)
-                        rot_anim.duration = 200
-                        rot_anim.easing.type = Easing.OutQuad
+                        root.car_moving_distance = (car_driving_speed / 3.6) / (1000/positionTimer_interval);
+                        rot_anim.duration = 200;
+                        rot_anim.easing.type = Easing.OutQuad;
                     }
                 }else{
                     // NorthUp
-                    root.car_moving_distance = (car_driving_speed / 3.6) / (1000/positionTimer_interval)
-                    rot_anim.duration = 200
-                    rot_anim.easing.type = Easing.OutQuad
+                    root.car_moving_distance = (car_driving_speed / 3.6) / (1000/positionTimer_interval);
+                    rot_anim.duration = 200;
+                    rot_anim.easing.type = Easing.OutQuad;
                 }
 
-                root.car_direction = next_direction
+                root.car_direction = next_direction;
 
                 // set next coordidnate
                 if(next_distance < (root.car_moving_distance * 1.5))

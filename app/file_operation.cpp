@@ -15,6 +15,7 @@ void File_Operation::initFileOperation(){
     m_update_interval = 100; // set default millisecond
     m_start_latitude = 36.136261; // set default coordinate Westgate
     m_start_longitute = -115.151254;
+    m_mapStyleUrls = "mapbox://styles/mapbox/streets-v10"; // set default map style
 
     QFile file(MAP_ACCESS_TOKEN_FILEPATH);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -61,6 +62,13 @@ void File_Operation::initFileOperation(){
         return;
     }
 
+    if(jsonObj.contains("mapStyleUrls")){
+        m_mapStyleUrls = jsonObj["mapStyleUrls"].toString();
+    }else{
+        fprintf(stderr,"Failed to find mapStyleUrls data \"%s\": %m", qPrintable(MAP_ACCESS_TOKEN_FILEPATH));
+        return;
+    }
+
     file.close();
 
     return;
@@ -80,4 +88,8 @@ double File_Operation::getStartLatitude(){
 }
 double File_Operation::getStartLongitute(){
     return m_start_longitute;
+}
+
+QString File_Operation::getMapStyleUrls() {
+    return m_mapStyleUrls;
 }

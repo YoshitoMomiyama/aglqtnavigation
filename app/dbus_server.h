@@ -29,5 +29,6 @@ public slots:
     void sendSignalPosInfo(double lat,double lon,double drc,double dst);
     void sendSignalStopDemo();
     void sendSignalArrvied();
+    void sendCheckDirection(double cur_dir,double next_dir,double is_rot);
 };
 #endif // DBUS_SERVER_H
