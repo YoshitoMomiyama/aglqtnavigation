@@ -17,9 +17,9 @@ void File_Operation::initFileOperation(){
     m_start_longitute = -115.151254;
     m_mapStyleUrls = "mapbox://styles/mapbox/streets-v10"; // set default map style
 
-    QFile file(MAP_ACCESS_TOKEN_FILEPATH);
+    QFile file(NAVI_CONFIG_FILEPATH);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        fprintf(stderr,"Failed to open mapAccessToken file \"%s\": %m", qPrintable(MAP_ACCESS_TOKEN_FILEPATH));
+        fprintf(stderr,"Failed to open mapAccessToken file \"%s\": %m", qPrintable(NAVI_CONFIG_FILEPATH));
         return;
     }
 
@@ -30,42 +30,42 @@ void File_Operation::initFileOperation(){
     if(jsonObj.contains("mapAccessToken")){
         m_mapAccessToken = jsonObj["mapAccessToken"].toString();
     }else{
-        fprintf(stderr,"Failed to find mapAccessToken data \"%s\": %m", qPrintable(MAP_ACCESS_TOKEN_FILEPATH));
+        fprintf(stderr,"Failed to find mapAccessToken data \"%s\": %m", qPrintable(NAVI_CONFIG_FILEPATH));
         return;
     }
 
     if(jsonObj.contains("speed")){
         m_car_speed = jsonObj["speed"].toDouble();
     }else{
-        fprintf(stderr,"Failed to find speed data \"%s\": %m", qPrintable(MAP_ACCESS_TOKEN_FILEPATH));
+        fprintf(stderr,"Failed to find speed data \"%s\": %m", qPrintable(NAVI_CONFIG_FILEPATH));
         return;
     }
 
     if(jsonObj.contains("interval")){
         m_update_interval = jsonObj["interval"].toInt();
     }else{
-        fprintf(stderr,"Failed to find interval data \"%s\": %m", qPrintable(MAP_ACCESS_TOKEN_FILEPATH));
+        fprintf(stderr,"Failed to find interval data \"%s\": %m", qPrintable(NAVI_CONFIG_FILEPATH));
         return;
     }
 
     if(jsonObj.contains("latitude")){
         m_start_latitude = jsonObj["latitude"].toDouble();
     }else{
-        fprintf(stderr,"Failed to find latitude data \"%s\": %m", qPrintable(MAP_ACCESS_TOKEN_FILEPATH));
+        fprintf(stderr,"Failed to find latitude data \"%s\": %m", qPrintable(NAVI_CONFIG_FILEPATH));
         return;
     }
 
     if(jsonObj.contains("longitute")){
         m_start_longitute = jsonObj["longitute"].toDouble();
     }else{
-        fprintf(stderr,"Failed to find longitute data \"%s\": %m", qPrintable(MAP_ACCESS_TOKEN_FILEPATH));
+        fprintf(stderr,"Failed to find longitute data \"%s\": %m", qPrintable(NAVI_CONFIG_FILEPATH));
         return;
     }
 
     if(jsonObj.contains("mapStyleUrls")){
         m_mapStyleUrls = jsonObj["mapStyleUrls"].toString();
     }else{
-        fprintf(stderr,"Failed to find mapStyleUrls data \"%s\": %m", qPrintable(MAP_ACCESS_TOKEN_FILEPATH));
+        fprintf(stderr,"Failed to find mapStyleUrls data \"%s\": %m", qPrintable(NAVI_CONFIG_FILEPATH));
         return;
     }
 
@@ -89,7 +89,6 @@ double File_Operation::getStartLatitude(){
 double File_Operation::getStartLongitute(){
     return m_start_longitute;
 }
-
 QString File_Operation::getMapStyleUrls() {
     return m_mapStyleUrls;
 }

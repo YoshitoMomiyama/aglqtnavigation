@@ -1,3 +1,5 @@
+#ifndef GUIDANCE_MODULE_H
+#define GUIDANCE_MODULE_H
 #include <sys/stat.h>
 #include <QObject>
 #include <QString>
@@ -30,3 +32,4 @@ public:
         system(tts_voice);
     }
 };
+#endif // GUIDANCE_MODULE_H

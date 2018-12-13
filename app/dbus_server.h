@@ -29,6 +29,7 @@ public slots:
     void sendSignalPosInfo(double lat,double lon,double drc,double dst);
     void sendSignalStopDemo();
     void sendSignalArrvied();
+    // for Debug heading-up driving over long distance routes
     void sendCheckDirection(double cur_dir,double next_dir,double is_rot);
 };
 #endif // DBUS_SERVER_H

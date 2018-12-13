@@ -24,7 +24,7 @@
                 <!-- void getRouteInfo() -->
                 <signal name="getRouteInfo">
                 </signal>
-                <!-- void checkdirection() -->
+                <!-- for Debug heading-up driving over long distance routes -->
                 <signal name="checkdirection">
                     <arg name="cur_direction"  type="d" direction="out"/>
                     <arg name="next_direction" type="d" direction="out"/>

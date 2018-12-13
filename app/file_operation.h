@@ -7,9 +7,11 @@
 #include <QJsonDocument>
 
 /******************************************************
- * Write access token of mapbox in /etc/mapAccessToken
+ * Please set mapAccessToken, mapStyleUrl, speed,
+ * interval, latitude and longitude in JSON format
+ * in /etc/naviconfig.ini
  ******************************************************/
-#define MAP_ACCESS_TOKEN_FILEPATH "/etc/naviconfig.ini"
+#define NAVI_CONFIG_FILEPATH "/etc/naviconfig.ini"
 
 class File_Operation: public QObject{
 

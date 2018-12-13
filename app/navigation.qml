@@ -234,8 +234,8 @@ ApplicationWindow {
 					case 1:
 						map.pathcounter = 0
 						map.segmentcounter = 0
-//						console.log("1 route found")
-//						console.log("path: ", get(0).path.length, "segment: ", get(0).segments.length)
+                        console.log("1 route found")
+                        console.log("path: ", get(0).path.length, "segment: ", get(0).segments.length)
 //						for(var i = 0; i < get(0).path.length; i++){
 //							console.log("", get(0).path[i])
 //						}
@@ -503,7 +503,10 @@ ApplicationWindow {
 //                        console.log("map.bearing:",map.bearing);
 //                        console.log("next_direction:",next_direction);
 //                    }
-                    map.qmlCheckDirection(cur_direction,next_direction,is_rotating);
+
+                    // for Debug heading-up driving over long distance routes
+                    if(is_rotating > 0)
+                        map.qmlCheckDirection(cur_direction,next_direction,is_rotating);
 
                     // rotation angle case
                     if(is_rotating > 180){
