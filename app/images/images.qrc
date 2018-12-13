@@ -5,7 +5,6 @@
         <file>240px-Antu_file-zoom-out.svg.png</file>
         <file>240px-Antu_kdenlive-zoom-large.svg.png</file>
         <file>240px-Compass_icon_NE.svg.png</file>
-        <file>240px-Red_Arrow_Up.svg.png</file>
         <file>207px-Car_icon_top.svg.png</file>
         <file>10_11_bear_left_112px-Signal_C117a.svg.png</file>
         <file>11_2_bear_right_112px-Signal_C117a.svg.png</file>
@@ -24,5 +23,6 @@
         <file>Emoji_u1f3c1.svg</file>
         <file>HEB_project_flow_icon_04_checkered_flag.svg</file>
         <file>MUTCD_RS-113.svg</file>
+        <file>posimark_r.png</file>
     </qresource>
 </RCC>

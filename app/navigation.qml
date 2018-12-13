@@ -141,9 +141,9 @@ ApplicationWindow {
             property int isRotating: 0
             sourceItem: Image {
                 id: car_position_mapitem_image
-                width: 32
-                height: 32
-                source: "images/240px-Red_Arrow_Up.svg.png"
+                width: 48
+                height: 48
+                source: "images/posimark_r.png"
 
                 transform: Rotation {
                     id: car_position_mapitem_image_rotate
