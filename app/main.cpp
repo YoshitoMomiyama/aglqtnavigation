@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-#ifdef AGL
-#define USE_QTAGLEXTRAS			0
-#define USE_QLIBWINDOWMANAGER	1
-#else
+#ifdef DESKTOP
 #define USE_QTAGLEXTRAS			0
 #define USE_QLIBWINDOWMANAGER	0
+#else
+#define USE_QTAGLEXTRAS			0
+#define USE_QLIBWINDOWMANAGER	1
 #endif
 
 #if	USE_QTAGLEXTRAS

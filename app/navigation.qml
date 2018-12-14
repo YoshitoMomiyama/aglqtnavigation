@@ -86,8 +86,6 @@ ApplicationWindow {
 					map.center.longitude = get(0).coordinate.longitude
 				}
 			}
-            //coordinate: poiTheQtComapny.coordinate
-            //anchorPoint: Qt.point(-poiTheQtComapny.sourceItem.width * 0.5,poiTheQtComapny.sourceItem.height * 1.5)
         }
 		MapItemView {
 			model: geocodeModel
@@ -154,7 +152,6 @@ ApplicationWindow {
             }
             anchorPoint: Qt.point(car_position_mapitem_image.width/2, car_position_mapitem_image.height/2)
             coordinate: map.currentpostion
-
 
             states: [
                 State {
@@ -234,20 +231,6 @@ ApplicationWindow {
 					case 1:
 						map.pathcounter = 0
 						map.segmentcounter = 0
-                        console.log("1 route found")
-                        console.log("path: ", get(0).path.length, "segment: ", get(0).segments.length)
-//						for(var i = 0; i < get(0).path.length; i++){
-//							console.log("", get(0).path[i])
-//						}
-
-//                        console.log("1st instruction: ", get(0).segments[map.segmentcounter].maneuver.instructionText)
-//                        for( var i = 0; i < routeModel.get(0).segments.length; i++){
-//                            console.log("segments[",i,"].maneuver.direction:" ,routeModel.get(0).segments[i].maneuver.direction)
-//                            console.log("segments[",i,"].maneuver.instructionText:" ,routeModel.get(0).segments[i].maneuver.instructionText)
-//                            console.log("segments[",i,"].maneuver.path[0]:" ,routeModel.get(0).segments[i].path[0].latitude,",",routeModel.get(0).segments[i].path[0].longitude)
-//                            markerModel.addMarker(routeModel.get(0).segments[i].path[0]) // for debug
-//                        }
-
                         break
 					}
 				} else if (status == RouteModel.Error) {
@@ -498,38 +481,24 @@ ApplicationWindow {
                         is_rotating = 360 - is_rotating;
                     }
 
-//                    if(is_rotating > 0){ // for map rotateAnimation cntrol debug
-//                        console.log("is_rotating:",is_rotating);
-//                        console.log("map.bearing:",map.bearing);
-//                        console.log("next_direction:",next_direction);
-//                    }
-
-                    // for Debug heading-up driving over long distance routes
-                    if(is_rotating > 0)
-                        map.qmlCheckDirection(cur_direction,next_direction,is_rotating);
-
                     // rotation angle case
                     if(is_rotating > 180){
                         // driving stop hard turn
-                        console.log("driving stop hard turn");
                         root.car_moving_distance = 0;
                         rot_anim.duration = 1600;
                         rot_anim.easing.type = Easing.OutQuint;
                     } else if(is_rotating > 90){
                         // driving stop normal turn
-                        console.log("driving stop normal turn");
                         root.car_moving_distance = 0;
                         rot_anim.duration = 800;
                         rot_anim.easing.type = Easing.OutQuart;
                     } else if(is_rotating > 60){
                         // driving slow speed normal turn
-                        console.log("driving slow speed normal turn");
                         root.car_moving_distance = ((car_driving_speed / 3.6) / (1000/positionTimer_interval)) * 0.3;
                         rot_anim.duration = 400;
                         rot_anim.easing.type = Easing.OutCubic;
                     } else if(is_rotating > 30){
                         // driving half speed soft turn
-                        console.log("driving half speed soft turn");
                         root.car_moving_distance = ((car_driving_speed / 3.6) / (1000/positionTimer_interval)) * 0.5;
                         rot_anim.duration = 300;
                         rot_anim.easing.type = Easing.OutQuad;
@@ -581,7 +550,6 @@ ApplicationWindow {
                 // report a new instruction if current position matches with the head position of the segment
                 if(segmentcounter <= routeModel.get(0).segments.length - 1){
                      if(next_cross_distance < 2){
-                        console.log("new segment instruction: ", routeModel.get(0).segments[segmentcounter].maneuver.instructionText) // for segment debug
                         progress_next_cross.setProgress(0)
                         if(segmentcounter < routeModel.get(0).segments.length - 1){
                             segmentcounter++
@@ -608,14 +576,11 @@ ApplicationWindow {
 
         function doGetRouteInfoSlot(){
             if(btn_guidance.sts_guide == 0){ // idle
-                console.log("called doGetRouteInfoSlot sts_guide == idle")
                 map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,car_accumulated_distance);
             }else if(btn_guidance.sts_guide == 1){ // Routing
-                console.log("called doGetRouteInfoSlot sts_guide == Routing")
                 map.qmlSignalPosInfo(car_position_lat, car_position_lon,car_direction,car_accumulated_distance);
                 map.qmlSignalRouteInfo(car_position_lat, car_position_lon,routeQuery.waypoints[1].latitude,routeQuery.waypoints[1].longitude);
             }else if(btn_guidance.sts_guide == 2){ // onGuide
-                console.log("called doGetRouteInfoSlot sts_guide == onGuide")
                 map.qmlSignalRouteInfo(car_position_lat, car_position_lon,routeQuery.waypoints[1].latitude,routeQuery.waypoints[1].longitude);
             }
         }

@@ -65,12 +65,6 @@ void DBus_Server::initAPIs(QObject *parent){
                          this,SLOT(sendSignalArrvied()))) {
         qDebug() << m_serverName << "qmlSIGNAL:qmlSignalArrvied to cppSLOT:sendSignalArrvied connect is failed";
     }
-
-    // for Debug heading-up driving over long distance routes
-    if(!QObject::connect(parent,SIGNAL(qmlCheckDirection(double,double,double)),
-                         this,SLOT(sendCheckDirection(double,double,double)))) {
-        qDebug() << m_serverName << "qmlSIGNAL:qmlCheckDirection to cppSLOT:sendCheckDirection connect is failed";
-    }
 }
 
 void DBus_Server::getRouteInfoSlot(){
@@ -91,7 +85,6 @@ void DBus_Server::sendSignalRouteInfo(double srt_lat, double srt_lon, double end
 }
 
 void DBus_Server::sendSignalPosInfo(double lat, double lon, double drc, double dst){
-//    qDebug() << "call sendSignalPosInfo ";
     QDBusMessage message = QDBusMessage::createSignal(m_objName,
                                                      org::agl::naviapi::staticInterfaceName(),
                                                      "signalPosInfo");
@@ -114,16 +107,6 @@ void DBus_Server::sendSignalArrvied(){
     QDBusMessage message = QDBusMessage::createSignal(m_objName,
                                                      org::agl::naviapi::staticInterfaceName(),
                                                      "signalArrvied");
-    QDBusConnection::sessionBus().send(message);
-    return;
-}
-
-// for Debug heading-up driving over long distance routes
-void DBus_Server::sendCheckDirection(double cur_dir,double next_dir,double is_rot){
-    QDBusMessage message = QDBusMessage::createSignal(m_objName,
-                                                     org::agl::naviapi::staticInterfaceName(),
-                                                     "checkdirection");
-    message << cur_dir << next_dir << is_rot;
     QDBusConnection::sessionBus().send(message);
     return;
 }

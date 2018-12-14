@@ -23,7 +23,6 @@ Item {
         State {
             name: "0" // NoDirection
             PropertyChanges { target: img_destination_direction; visible: false }
-//            PropertyChanges { target: direction; source: "images/SW_Patern_3.bmp" }
         },
         State {
             name: "1" // DirectionForward
