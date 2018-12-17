@@ -61,11 +61,9 @@ ApplicationWindow {
         width: parent.width
         height: parent.height
         plugin: Plugin {
-            name: "mapboxgl"
-            PluginParameter { name: "mapboxgl.access_token";
+            name: "mapbox"
+            PluginParameter { name: "mapbox.access_token";
             value: fileOperation.getMapAccessToken() }
-            PluginParameter { name: "mapboxgl.mapping.additional_style_urls";
-            value: fileOperation.getMapStyleUrls() }
         }
         center: QtPositioning.coordinate(car_position_lat, car_position_lon)
         zoomLevel: default_zoom_level

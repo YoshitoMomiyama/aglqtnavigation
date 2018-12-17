@@ -118,12 +118,7 @@ int main(int argc, char *argv[])
 			if(QString::compare(myname, appname, Qt::CaseInsensitive) == 0)
 			{
 				qDebug("Surface %s got tapShortcut\n", appname);
-				json_object *para, *area;
-				json_object_object_get_ex(object, "parameter", &para);
-				json_object_object_get_ex(para, "area", &area);
-				const char *displayArea = json_object_get_string(area);
-				qDebug("Surface %s got tapShortcut area\n", displayArea);
-				qwmHandler->activateWindow(myname, QString(QLatin1String(displayArea)));
+                qwmHandler->activateWindow(myname);
 			}
 		}
 	});
