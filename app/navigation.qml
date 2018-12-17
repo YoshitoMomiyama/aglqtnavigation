@@ -130,6 +130,7 @@ ApplicationWindow {
                 style: Text.Outline
             }
             coordinate: poi.coordinate
+            z:11
             anchorPoint: Qt.point(-poi.sourceItem.width * 0.5, poi.sourceItem.height * 1.5)
         }
         MapQuickItem {
@@ -150,7 +151,7 @@ ApplicationWindow {
             }
             anchorPoint: Qt.point(car_position_mapitem_image.width/2, car_position_mapitem_image.height/2)
             coordinate: map.currentpostion
-
+            z:10
             states: [
                 State {
                     name: "HeadingUp"
@@ -175,6 +176,7 @@ ApplicationWindow {
             id: icon_start_point
             anchorPoint.x: icon_start_point_image.width/2
             anchorPoint.y: icon_start_point_image.height
+            z:11
             sourceItem: Image {
                 id: icon_start_point_image
                 width: 32
@@ -187,6 +189,7 @@ ApplicationWindow {
             id: icon_end_point
             anchorPoint.x: icon_end_point_image.width/2
             anchorPoint.y: icon_end_point_image.height
+            z:11
             sourceItem: Image {
                 id: icon_end_point_image
                 width: 32
@@ -199,6 +202,7 @@ ApplicationWindow {
             id: icon_segment_point
             anchorPoint.x: icon_segment_point_image.width/2 - 5
             anchorPoint.y: icon_segment_point_image.height/2 + 25
+            z:11
             sourceItem: Image {
                 id: icon_segment_point_image
                 width: 64
@@ -245,6 +249,7 @@ ApplicationWindow {
 				route: routeData
 				line.color: "#4658da"
 				line.width: 10
+                z:5
 				smooth: true
                 opacity: 0.8
 			}
@@ -266,6 +271,7 @@ ApplicationWindow {
                 id: icon_destination_point
                 anchorPoint.x: icon_destination_point_image.width/4
                 anchorPoint.y: icon_destination_point_image.height
+                z:20
                 coordinate: position
 
                 sourceItem: Image {
