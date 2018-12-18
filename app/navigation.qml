@@ -151,7 +151,7 @@ ApplicationWindow {
             }
             anchorPoint: Qt.point(car_position_mapitem_image.width/2, car_position_mapitem_image.height/2)
             coordinate: map.currentpostion
-            z:10
+            z:12
             states: [
                 State {
                     name: "HeadingUp"
