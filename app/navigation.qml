@@ -140,7 +140,7 @@ ApplicationWindow {
                 id: car_position_mapitem_image
                 width: 48
                 height: 48
-                source: "images/posimark_r.png"
+                source: "images/position02.svg"
 
                 transform: Rotation {
                     id: car_position_mapitem_image_rotate
